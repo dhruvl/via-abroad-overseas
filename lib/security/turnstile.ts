@@ -7,6 +7,35 @@ export const isTurnstileConfiguredServer = Boolean(
 );
 
 /**
+ * Decides whether the local-development Turnstile bypass may apply.
+ *
+ * The bypass is permitted ONLY when the app is definitively NOT running as
+ * a production deployment. It requires BOTH:
+ *   - the runtime is not production — `NODE_ENV !== "production"` AND
+ *     `VERCEL_ENV !== "production"` (belt-and-suspenders: a Vercel
+ *     production deployment always sets `VERCEL_ENV=production`, even in
+ *     the unlikely event `NODE_ENV` were mis-set), AND
+ *   - `ALLOW_UNVERIFIED_TURNSTILE_IN_DEV` is explicitly the string "true".
+ *
+ * Consequence: a Vercel Production deployment can never accept an
+ * unverified form because of this development variable. Kept as a pure
+ * function of its env input so the invariant is directly unit-tested.
+ */
+export function isDevTurnstileBypassAllowed(
+  env: {
+    NODE_ENV?: string;
+    VERCEL_ENV?: string;
+    ALLOW_UNVERIFIED_TURNSTILE_IN_DEV?: string;
+  } = process.env
+): boolean {
+  const isProductionRuntime =
+    env.NODE_ENV === "production" || env.VERCEL_ENV === "production";
+  return (
+    !isProductionRuntime && env.ALLOW_UNVERIFIED_TURNSTILE_IN_DEV === "true"
+  );
+}
+
+/**
  * Verifies a Turnstile token server-side. The client-side widget alone is
  * never trusted — every form submission is re-checked here before any
  * database write happens.
@@ -21,10 +50,7 @@ export async function verifyTurnstileToken(
   remoteIp?: string
 ): Promise<boolean> {
   if (!isTurnstileConfiguredServer) {
-    return (
-      process.env.NODE_ENV !== "production" &&
-      process.env.ALLOW_UNVERIFIED_TURNSTILE_IN_DEV === "true"
-    );
+    return isDevTurnstileBypassAllowed();
   }
 
   if (!token) return false;

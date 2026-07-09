@@ -6,6 +6,23 @@ const isUpstashConfigured = Boolean(
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
 );
 
+// Surface — loudly, in logs — when a production/preview deployment is
+// running without distributed rate limiting, so it never silently relies
+// on the per-instance in-memory fallback (which is ineffective across
+// Vercel's serverless instances). This is a visibility signal, not a
+// hard failure: forms still work, but abuse protection is degraded until
+// Upstash is configured.
+const isProductionRuntime =
+  process.env.NODE_ENV === "production" || process.env.VERCEL_ENV === "production";
+if (isProductionRuntime && !isUpstashConfigured) {
+  console.warn(
+    "[rate-limit] Upstash is NOT configured in a production runtime. " +
+      "Falling back to per-instance in-memory rate limiting, which is NOT " +
+      "distributed and provides weak abuse protection. Set " +
+      "UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN."
+  );
+}
+
 const redis = isUpstashConfigured
   ? new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL!,

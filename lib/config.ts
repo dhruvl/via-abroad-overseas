@@ -29,9 +29,31 @@ export const business = {
 
 export const addressFull = `${business.address.line1}, ${business.address.line2}, ${business.address.locality}, ${business.address.city} - ${business.address.postalCode}, ${business.address.country}`;
 
-export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "http://localhost:3000";
+/**
+ * Canonical site origin used for metadata, sitemap, robots, OG tags and
+ * JSON-LD. Resolution priority:
+ *   1. NEXT_PUBLIC_SITE_URL — explicit, and the only value that should be
+ *      used once a custom production domain exists.
+ *   2. https://<VERCEL_PROJECT_PRODUCTION_URL> — Vercel's stable production
+ *      domain, injected at build time. This guarantees canonical/sitemap
+ *      URLs never ship as "localhost" on a Vercel deployment even if the
+ *      explicit variable was forgotten. (These VERCEL_* vars are
+ *      server-only; every consumer of `siteUrl` is server-rendered.)
+ *   3. http://localhost:3000 — local development fallback only.
+ */
+function resolveSiteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (explicit) return explicit.replace(/\/$/, "");
+
+  const vercelProductionDomain = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (vercelProductionDomain) {
+    return `https://${vercelProductionDomain.replace(/^https?:\/\//, "").replace(/\/$/, "")}`;
+  }
+
+  return "http://localhost:3000";
+}
+
+export const siteUrl = resolveSiteUrl();
 
 /**
  * WhatsApp is intentionally NOT assumed to be the same as the business

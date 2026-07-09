@@ -5,6 +5,33 @@ async function loadConfig() {
   return import("@/lib/config");
 }
 
+describe("siteUrl resolution", () => {
+  beforeEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("uses NEXT_PUBLIC_SITE_URL when set, stripping a trailing slash", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://viaabroadoverseas.com/");
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "via-abroad-overseas.vercel.app");
+    const { siteUrl } = await loadConfig();
+    expect(siteUrl).toBe("https://viaabroadoverseas.com");
+  });
+
+  it("falls back to the Vercel production domain (never localhost) when the explicit var is unset", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "via-abroad-overseas.vercel.app");
+    const { siteUrl } = await loadConfig();
+    expect(siteUrl).toBe("https://via-abroad-overseas.vercel.app");
+  });
+
+  it("only uses localhost when neither the explicit nor the Vercel var is present", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "");
+    const { siteUrl } = await loadConfig();
+    expect(siteUrl).toBe("http://localhost:3000");
+  });
+});
+
 describe("whatsapp config", () => {
   beforeEach(() => {
     vi.unstubAllEnvs();

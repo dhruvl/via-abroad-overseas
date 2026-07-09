@@ -79,8 +79,24 @@ Production model: **Vercel** (app) + **Supabase** (database/auth) +
      naming consistent).
 3. Set `NEXT_PUBLIC_SITE_URL` to your final production domain
    (`https://www.viaabroadoverseas.com` or similar) — this feeds
-   canonical URLs, the sitemap, Open Graph tags, and email links.
+   canonical URLs, the sitemap, Open Graph tags, and email links. If you
+   do NOT set it, the app now automatically falls back to Vercel's
+   production domain (`VERCEL_PROJECT_PRODUCTION_URL`), so canonical/sitemap
+   URLs are never `localhost` on a deployed build — but you should still
+   set it explicitly once a custom domain exists.
 4. Deploy.
+
+> **CRITICAL — `NEXT_PUBLIC_*` values are baked in at BUILD time.** Adding
+> or changing any `NEXT_PUBLIC_*` variable in Vercel does nothing to an
+> already-running deployment; you MUST trigger a fresh production
+> deployment (redeploy) for the new values to take effect. Symptoms of a
+> build that ran without them: canonical tags / sitemap show
+> `http://localhost:3000`, and the admin pages render "Admin System Not
+> Yet Configured" (because `NEXT_PUBLIC_SUPABASE_URL` /
+> `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` were empty at build time). Server
+> secrets (`SUPABASE_SECRET_KEY`, `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`,
+> `UPSTASH_*`) are read at request time and do not require a rebuild, but
+> keeping everything set before the first production build is simplest.
 
 ## 7. Domain Configuration
 
