@@ -10,7 +10,7 @@ import { services, type Service } from "@/data/services";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Explore VIA ABROAD OVERSEAS services: study abroad counseling, university admissions, visa assistance, career counseling, application support, and scholarship guidance.",
+    "Explore VIA ABROAD OVERSEAS services: study abroad counselling, university admissions, visa assistance, career counselling, application support, and scholarship guidance.",
   alternates: { canonical: "/services" },
 };
 

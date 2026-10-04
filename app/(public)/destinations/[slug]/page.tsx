@@ -50,7 +50,7 @@ export default async function DestinationDetailPage({
       />
       <PageViewTracker event="destination_viewed" slug={destination.slug} />
       <PageHero
-        eyebrow={`${destination.flag} Study Destination`}
+        eyebrow="Study Destination"
         title={`Study in ${destination.name}`}
         description={destination.tagline}
         breadcrumb={[{ label: "Destinations", href: "/destinations" }, { label: destination.name }]}
@@ -127,7 +127,7 @@ export default async function DestinationDetailPage({
               Visa policies, tuition costs, and admission requirements can
               change and vary by university and program. The information on
               this page is general in nature — please consult official
-              government sources and your counselor for current,
+              government sources and your counsellor for current,
               individualized guidance.
             </p>
           </Reveal>

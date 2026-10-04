@@ -108,7 +108,8 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <Button asChild size="sm" className="px-4">
+          {/* Phones use the bottom action bar for this; avoid a second gold CTA. */}
+          <Button asChild size="sm" className="hidden px-4 md:inline-flex">
             <Link href={primaryCta.href}>Book Consultation</Link>
           </Button>
           <button

@@ -22,7 +22,7 @@ export function StudentConfirmationEmail({ fullName }: { fullName: string }) {
           </Heading>
           <Text style={{ fontSize: 15, color: "#101828", lineHeight: 1.6 }}>
             We&rsquo;ve received your enquiry at {business.name}. One of our
-            counselors will review your details and reach out to you soon.
+            counsellors will review your details and reach out to you soon.
           </Text>
           <Text style={{ fontSize: 15, color: "#101828", lineHeight: 1.6 }}>
             In the meantime, if you have an urgent question, feel free to

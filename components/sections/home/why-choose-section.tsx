@@ -7,7 +7,6 @@ import {
   Infinity as InfinityIcon,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 
 const benefits = [
@@ -54,8 +53,7 @@ export function WhyChooseSection() {
     <section className="bg-surface py-20 md:py-28">
       <Container>
         <Reveal className="mx-auto max-w-2xl text-center">
-          <Eyebrow className="justify-center">Why Via Abroad</Eyebrow>
-          <h2 className="mt-4 text-balance font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-semibold text-navy-900">
+          <h2 className="text-balance font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-semibold text-navy-900">
             Why students choose Via Abroad
           </h2>
           <p className="mt-4 text-ink-muted">

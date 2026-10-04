@@ -83,7 +83,7 @@ export function ContactForm() {
       <div className="flex flex-col items-center gap-4 rounded-2xl border border-success-bg bg-success-bg px-6 py-12 text-center" role="status" aria-live="polite">
         <CheckCircle2 className="h-10 w-10 text-success" aria-hidden="true" />
         <p className="max-w-sm text-success">
-          Thank you! Your enquiry has been received. Our counselor will
+          Thank you! Your enquiry has been received. Our counsellor will
           contact you soon.
         </p>
       </div>

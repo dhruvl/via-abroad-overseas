@@ -27,7 +27,7 @@ const values = [
   },
   {
     title: "Personal Attention",
-    description: "A counselor who understands your specific profile and circumstances.",
+    description: "A counsellor who understands your specific profile and circumstances.",
     icon: Users,
   },
   {
@@ -98,7 +98,7 @@ export default function AboutPage() {
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow className="justify-center">Our Values</Eyebrow>
             <h2 className="mt-4 text-balance font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold text-navy-900">
-              What Guides Our Counseling
+              What Guides Our Counselling
             </h2>
           </Reveal>
           <StaggerGroup className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

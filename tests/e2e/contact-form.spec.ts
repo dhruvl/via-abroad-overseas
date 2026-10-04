@@ -19,7 +19,7 @@ test.describe("Contact form", () => {
     await page.getByLabel("Phone Number").fill("9876543210");
     await page.getByLabel("Email").fill("not-an-email");
     await page.getByLabel("Interested Country").selectOption("United States");
-    await page.getByLabel("Service Required").selectOption("Study Abroad Counseling");
+    await page.getByLabel("Service Required").selectOption("Study Abroad Counselling");
     await page.getByLabel(/I agree that VIA ABROAD OVERSEAS/).check();
     await page.getByRole("button", { name: "Submit Enquiry" }).click();
 

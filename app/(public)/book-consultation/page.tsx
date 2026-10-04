@@ -24,7 +24,7 @@ export default function BookConsultationPage() {
       <PageHero
         eyebrow="Free Consultation"
         title="Book Your Free Consultation"
-        description="Share a few details and a counselor will reach out to schedule your session."
+        description="Share a few details and a counsellor will reach out to schedule your session."
         breadcrumb={[{ label: "Book Consultation" }]}
       />
 

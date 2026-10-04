@@ -17,25 +17,25 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: "study-abroad",
-    title: "Study Abroad Counseling",
+    title: "Study Abroad Counselling",
     shortDescription:
-      "Personalized guidance to choose the right country, university, and course.",
+      "Personalised guidance to choose the right country, university, and course.",
     icon: "Compass",
     heroDescription:
-      "One-on-one counseling to help you decide where to study, what to study, and why — based on your academic profile, budget, and career goals.",
+      "One-on-one counselling to help you decide where to study, what to study, and why — based on your academic profile, budget, and career goals.",
     problem:
       "Choosing among thousands of universities and dozens of countries is overwhelming without structured guidance. Students often shortlist options based on incomplete or outdated information.",
     includes: [
       "In-depth profile assessment covering academics, budget, and goals",
       "Country and course shortlisting aligned with your career direction",
       "University comparison based on curriculum, cost, and outcomes",
-      "Ongoing counseling through every decision point in the journey",
+      "Ongoing counselling through every decision point in the journey",
     ],
     process: [
       "Book a free consultation to discuss your goals",
-      "Complete a detailed profile evaluation with your counselor",
+      "Complete a detailed profile evaluation with your counsellor",
       "Review a shortlist of countries, universities, and courses",
-      "Finalize your preferred options with counselor guidance",
+      "Finalize your preferred options with counsellor guidance",
     ],
     whoFor: [
       "Students who are early in their study abroad research",
@@ -44,7 +44,7 @@ export const services: Service[] = [
     ],
     faq: [
       {
-        question: "How early should I start the counseling process?",
+        question: "How early should I start the counselling process?",
         answer:
           "We recommend starting at least 8–12 months before your intended intake, so there is enough time for shortlisting, applications, and visa preparation. Earlier starts give you more options.",
       },
@@ -56,7 +56,7 @@ export const services: Service[] = [
       {
         question: "Do you help with course selection if I am undecided?",
         answer:
-          "Yes, our career counseling process is designed for students who have not finalized a course, helping you align your choice with your interests and career goals.",
+          "Yes, our career counselling process is designed for students who have not finalized a course, helping you align your choice with your interests and career goals.",
       },
     ],
     relatedSlugs: ["university-admissions", "career-counseling"],
@@ -78,7 +78,7 @@ export const services: Service[] = [
       "Coordination support for admission follow-ups",
     ],
     process: [
-      "Finalize your university shortlist with your counselor",
+      "Finalize your university shortlist with your counsellor",
       "Gather and prepare required academic and identity documents",
       "Complete applications with guided review at each step",
       "Track submissions and respond to university requests",
@@ -92,7 +92,7 @@ export const services: Service[] = [
       {
         question: "How many universities should I apply to?",
         answer:
-          "This depends on your profile and goals. Your counselor will help you build a balanced list across reach, match, and safe options.",
+          "This depends on your profile and goals. Your counsellor will help you build a balanced list across reach, match, and safe options.",
       },
       {
         question: "Can you guarantee admission to a specific university?",
@@ -104,7 +104,7 @@ export const services: Service[] = [
   },
   {
     slug: "visa-assistance",
-    title: "Student Visa Services",
+    title: "Student Visa Assistance",
     shortDescription:
       "Expert support for student visa documentation and interview preparation.",
     icon: "FileCheck2",
@@ -120,7 +120,7 @@ export const services: Service[] = [
     ],
     process: [
       "Review your destination country's general visa category and process",
-      "Prepare your documentation checklist with your counselor",
+      "Prepare your documentation checklist with your counsellor",
       "Practice interview preparation where applicable",
       "Submit your application within recommended timelines",
     ],
@@ -145,12 +145,12 @@ export const services: Service[] = [
   },
   {
     slug: "career-counseling",
-    title: "Career Counseling",
+    title: "Career Guidance",
     shortDescription:
       "Helping students select courses aligned with their career goals.",
     icon: "Briefcase",
     heroDescription:
-      "Structured career counseling to help you connect your interests, strengths, and long-term goals to the right course and country decision.",
+      "Structured career counselling to help you connect your interests, strengths, and long-term goals to the right course and country decision.",
     problem:
       "Many students choose a course based on trends or peer choices rather than genuine fit, which can lead to disengagement or a difficult career transition later.",
     includes: [
@@ -163,7 +163,7 @@ export const services: Service[] = [
       "Complete a career-focused profile discussion",
       "Explore course and specialization options together",
       "Narrow down recommendations aligned with your goals",
-      "Carry your finalized direction into study abroad counseling",
+      "Carry your finalized direction into study abroad counselling",
     ],
     whoFor: [
       "Students undecided about their field of study",
@@ -172,7 +172,7 @@ export const services: Service[] = [
     ],
     faq: [
       {
-        question: "Is career counseling only for students changing fields?",
+        question: "Is career counselling only for students changing fields?",
         answer:
           "No, it is also useful for students who want confirmation that their intended course aligns with their long-term goals before committing significant time and resources.",
       },
@@ -181,7 +181,7 @@ export const services: Service[] = [
   },
   {
     slug: "application-support",
-    title: "Application Support",
+    title: "Application & Documentation",
     shortDescription:
       "Assistance with SOP, LOR, resume, and application documents.",
     icon: "FileText",

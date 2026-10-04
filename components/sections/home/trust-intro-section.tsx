@@ -1,6 +1,6 @@
-import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 
 const pillars = [
@@ -23,17 +23,16 @@ export function TrustIntroSection() {
     <section className="bg-surface py-20 md:py-28">
       <Container className="grid gap-14 lg:grid-cols-[1fr_0.85fr] lg:gap-16">
         <Reveal>
-          <Eyebrow>More Than a Consultancy</Eyebrow>
-          <h2 className="mt-4 text-balance font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-semibold text-navy-900">
+          <h2 className="text-balance font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-semibold text-navy-900">
             More than a consultancy.
             <br />
             Your partner abroad.
           </h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-muted">
-            At VIA ABROAD OVERSEAS, we guide students through every step of
-            their overseas education journey, from choosing the right
-            university to navigating the admissions process, visa
-            preparation, and pre-departure planning.
+            At VIA ABROAD OVERSEAS, we believe studying abroad is more than
+            choosing a university. It&rsquo;s about choosing the right
+            destination, course and future — with personalised guidance from
+            the first counselling session to the day you fly.
           </p>
 
           <ul className="mt-8 flex flex-col gap-5">
@@ -47,6 +46,14 @@ export function TrustIntroSection() {
               </li>
             ))}
           </ul>
+
+          <Link
+            href="/about"
+            className="group mt-9 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-navy-900 underline decoration-gold-500 decoration-1 underline-offset-[6px] transition-colors hover:text-gold-700"
+          >
+            Discover Via Abroad
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+          </Link>
         </Reveal>
 
         <Reveal delay={0.1} className="relative hidden lg:block">

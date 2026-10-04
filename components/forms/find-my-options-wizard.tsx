@@ -104,7 +104,7 @@ export function FindMyOptionsWizard() {
       >
         <CheckCircle2 className="h-10 w-10 text-success" aria-hidden="true" />
         <p className="max-w-sm text-success">
-          Thank you! A counselor will review your answers and reach out with
+          Thank you! A counsellor will review your answers and reach out with
           your options shortly.
         </p>
       </div>
@@ -135,7 +135,7 @@ export function FindMyOptionsWizard() {
                   ? "bg-gold-500 text-navy-950"
                   : index === step
                     ? "border-2 border-gold-500 text-navy-900"
-                    : "border border-border-strong text-ink-faint"
+                    : "border border-border-strong text-ink-muted"
               )}
             >
               {index + 1}
@@ -143,7 +143,7 @@ export function FindMyOptionsWizard() {
             <span
               className={cn(
                 "hidden text-xs font-semibold sm:block",
-                index === step ? "text-navy-900" : "text-ink-faint"
+                index === step ? "text-navy-900" : "text-ink-muted"
               )}
             >
               {s.label}

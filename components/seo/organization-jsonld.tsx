@@ -8,7 +8,7 @@ export function OrganizationJsonLd() {
     url: siteUrl,
     logo: `${siteUrl}/icon.png`,
     description:
-      "Study abroad and overseas education consultancy offering counseling, university admissions, visa assistance, and career guidance.",
+      "Study abroad and overseas education consultancy offering counselling, university admissions, visa assistance, and career guidance.",
     telephone: business.phoneE164,
     email: business.email,
     address: {

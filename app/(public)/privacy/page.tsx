@@ -44,7 +44,7 @@ export default function PrivacyPage() {
           <h2>Why We Collect It</h2>
           <p>
             We use this information solely to respond to your enquiry,
-            provide the counseling services you requested, and communicate
+            provide the counselling services you requested, and communicate
             with you about your study abroad plans.
           </p>
 
@@ -53,7 +53,7 @@ export default function PrivacyPage() {
             Enquiry information is stored securely in our database and is
             only accessible to authorized VIA ABROAD OVERSEAS staff members
             through an authenticated admin system. A copy of your enquiry
-            is also sent by email to our team so a counselor can follow up
+            is also sent by email to our team so a counsellor can follow up
             promptly.
           </p>
 
@@ -71,7 +71,7 @@ export default function PrivacyPage() {
           <p>
             We retain enquiry records for as long as reasonably necessary
             to respond to your enquiry and maintain records of our
-            counseling relationship, after which records may be archived
+            counselling relationship, after which records may be archived
             or deleted in line with our internal data handling practices.
           </p>
 

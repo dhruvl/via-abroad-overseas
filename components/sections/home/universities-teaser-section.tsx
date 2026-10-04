@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 
 /**
@@ -14,13 +13,12 @@ export function UniversitiesTeaserSection() {
     <section className="bg-surface-muted py-16 md:py-20">
       <Container className="flex flex-col items-center gap-5 text-center">
         <Reveal>
-          <Eyebrow className="justify-center">Universities</Eyebrow>
-          <h2 className="mt-4 text-balance font-display text-[clamp(1.5rem,3vw,2.25rem)] font-semibold text-navy-900">
+          <h2 className="text-balance font-display text-[clamp(1.5rem,3vw,2.25rem)] font-semibold text-navy-900">
             Find your place in the world.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-ink-muted">
-            We help shortlist universities and institutions based on your
-            academic profile, goals, budget, and preferred destination.
+            Explore universities and institutions that match your ambitions —
+            shortlisted around your academic profile, budget and destination.
           </p>
         </Reveal>
         <Reveal delay={0.08}>
