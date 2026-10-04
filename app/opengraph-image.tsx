@@ -37,7 +37,7 @@ export default function OpengraphImage() {
           {business.name}
         </div>
         <div style={{ display: "flex", fontSize: 30, color: "#c9cfd9", marginTop: 28, maxWidth: 820 }}>
-          Your Gateway to Global Education
+          Your dream. Your destination. Your global future.
         </div>
       </div>
     ),

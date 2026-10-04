@@ -8,6 +8,7 @@ export type Testimonial = {
   studentName: string;
   destination: string;
   university?: string;
+  course?: string;
   quote: string;
   photoUrl?: string;
 };

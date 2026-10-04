@@ -30,7 +30,7 @@ export default function DestinationsPage() {
             <Reveal key={destination.slug} delay={(index % 3) * 0.07}>
               <Link
                 href={`/destinations/${destination.slug}`}
-                className="group flex h-full flex-col justify-between rounded-2xl border border-border-subtle bg-surface-muted p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold-300 hover:shadow-[0_20px_40px_-16px_rgba(11,31,58,0.15)]"
+                className="group flex h-full flex-col justify-between rounded-2xl border border-border-subtle bg-surface-muted p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold-300 hover:shadow-[0_20px_40px_-16px_rgba(13,34,56,0.15)]"
               >
                 <div>
                   <span className="text-4xl" aria-hidden="true">

@@ -3,9 +3,18 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
-import { destinations } from "@/data/destinations";
+import { getFeaturedDestinations } from "@/data/destinations";
 
+/**
+ * OWNER CONTENT REQUIRED: no licensed destination photography exists yet
+ * (see Phase 0 audit — public/ is empty). Cards render a premium
+ * gradient-and-typography treatment instead of a stock photo or the flag
+ * emoji as the primary visual. Once real imagery is available per
+ * country, swap the gradient div below for next/image.
+ */
 export function DestinationsSection() {
+  const destinations = getFeaturedDestinations();
+
   return (
     <section className="bg-navy-950 py-20 text-white md:py-28">
       <Container>
@@ -30,17 +39,20 @@ export function DestinationsSection() {
             >
               <Link
                 href={`/destinations/${destination.slug}`}
-                className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-navy-800 to-navy-900 p-6 transition-all duration-300 hover:border-gold-400/50 hover:from-navy-700"
+                className="group relative flex h-full min-h-[220px] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-navy-800 to-navy-900 p-6 transition-all duration-300 hover:border-gold-400/50 hover:from-navy-700"
               >
                 <div
-                  className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-gold-500/10 blur-2xl transition-opacity duration-300 group-hover:opacity-100 opacity-60"
+                  className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gold-500/10 blur-2xl transition-opacity duration-300 group-hover:opacity-100 opacity-60"
                   aria-hidden="true"
                 />
                 <div>
-                  <span className="text-4xl" aria-hidden="true">
+                  <span
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-sm"
+                    aria-hidden="true"
+                  >
                     {destination.flag}
                   </span>
-                  <h3 className="mt-4 font-display text-lg font-semibold">
+                  <h3 className="mt-4 font-display text-xl font-semibold">
                     {destination.name}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/60">
@@ -48,7 +60,7 @@ export function DestinationsSection() {
                   </p>
                 </div>
                 <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-300">
-                  Explore
+                  Explore {destination.name}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </span>
               </Link>

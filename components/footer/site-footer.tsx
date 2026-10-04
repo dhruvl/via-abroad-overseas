@@ -2,7 +2,9 @@ import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { business, addressFull, callHref, emailHref, social } from "@/lib/config";
-import { footerQuickLinks, legalLinks } from "@/data/navigation";
+import { footerCompanyLinks, legalLinks } from "@/data/navigation";
+import { getFeaturedDestinations } from "@/data/destinations";
+import { services } from "@/data/services";
 import {
   InstagramIcon,
   FacebookIcon,
@@ -20,15 +22,21 @@ const socialIcons = [
 export function SiteFooter() {
   const year = new Date().getFullYear();
   const activeSocials = socialIcons.filter((s) => s.isConfigured);
+  const featuredDestinations = getFeaturedDestinations();
 
   return (
     <footer className="bg-navy-950 text-white/80">
-      <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-        <div className="lg:col-span-1">
+      <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
+        <div className="md:col-span-2 lg:col-span-1">
           <p className="font-display text-xl font-semibold text-white">
             VIA ABROAD <span className="text-gold-400">OVERSEAS</span>
           </p>
-          <p className="mt-3 text-sm text-white/60">{business.descriptor}</p>
+          <p className="mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-gold-300/70">
+            Make The Move
+          </p>
+          <p className="mt-4 text-sm leading-relaxed text-white/60">
+            Your trusted partner for international education.
+          </p>
           {activeSocials.length > 0 && (
             <div className="mt-6 flex gap-3">
               {activeSocials.map(({ key, Icon, label, url }) => (
@@ -49,10 +57,46 @@ export function SiteFooter() {
 
         <div>
           <h2 className="text-sm font-semibold uppercase tracking-wider text-gold-400">
-            Quick Links
+            Destinations
           </h2>
           <ul className="mt-4 space-y-3 text-sm">
-            {footerQuickLinks.map((link) => (
+            {featuredDestinations.map((destination) => (
+              <li key={destination.slug}>
+                <Link
+                  href={`/destinations/${destination.slug}`}
+                  className="text-white/70 hover:text-white"
+                >
+                  {destination.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-gold-400">
+            Services
+          </h2>
+          <ul className="mt-4 space-y-3 text-sm">
+            {services.map((service) => (
+              <li key={service.slug}>
+                <Link
+                  href={`/services/${service.slug}`}
+                  className="text-white/70 hover:text-white"
+                >
+                  {service.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-gold-400">
+            Company
+          </h2>
+          <ul className="mt-4 space-y-3 text-sm">
+            {footerCompanyLinks.map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className="text-white/70 hover:text-white">
                   {link.label}
@@ -83,23 +127,15 @@ export function SiteFooter() {
               <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
               <span>{addressFull}</span>
             </li>
+            <li className="pt-2">
+              <Link
+                href="/book-consultation"
+                className="inline-flex items-center rounded-full bg-gold-500 px-5 py-2.5 text-sm font-semibold text-navy-950 transition-colors hover:bg-gold-400"
+              >
+                Book Free Consultation
+              </Link>
+            </li>
           </ul>
-        </div>
-
-        <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-gold-400">
-            Start Your Journey
-          </h2>
-          <p className="mt-4 text-sm text-white/70">
-            Book a free consultation and take the first step toward studying
-            abroad.
-          </p>
-          <Link
-            href="/book-consultation"
-            className="mt-4 inline-flex items-center rounded-full bg-gold-500 px-5 py-2.5 text-sm font-semibold text-navy-950 transition-colors hover:bg-gold-400"
-          >
-            Book Free Consultation
-          </Link>
         </div>
       </Container>
 

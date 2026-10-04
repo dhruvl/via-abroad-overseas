@@ -5,9 +5,10 @@ export type NavLink = {
 
 export const primaryNav: NavLink[] = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
+  { label: "About Us", href: "/about" },
   { label: "Services", href: "/services" },
-  { label: "Study Destinations", href: "/destinations" },
+  { label: "Destinations", href: "/destinations" },
+  { label: "Universities", href: "/universities" },
   { label: "Success Stories", href: "/success-stories" },
   { label: "Contact", href: "/contact" },
 ];
@@ -17,14 +18,17 @@ export const primaryCta: NavLink = {
   href: "/book-consultation",
 };
 
-export const footerQuickLinks: NavLink[] = [
+export const secondaryCta: NavLink = {
+  label: "Explore Destinations",
+  href: "/destinations",
+};
+
+export const footerCompanyLinks: NavLink[] = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Destinations", href: "/destinations" },
+  { label: "About Us", href: "/about" },
+  { label: "Universities", href: "/universities" },
   { label: "Success Stories", href: "/success-stories" },
   { label: "Contact", href: "/contact" },
-  { label: "Book Consultation", href: "/book-consultation" },
 ];
 
 export const legalLinks: NavLink[] = [

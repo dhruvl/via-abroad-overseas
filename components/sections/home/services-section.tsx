@@ -48,7 +48,7 @@ export function ServicesSection() {
               >
                 <Link
                   href={`/services/${service.slug}`}
-                  className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border-subtle bg-surface p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold-300 hover:shadow-[0_20px_40px_-16px_rgba(11,31,58,0.18)] focus-visible:-translate-y-1 ${
+                  className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border-subtle bg-surface p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold-300 hover:shadow-[0_20px_40px_-16px_rgba(13,34,56,0.18)] focus-visible:-translate-y-1 ${
                     featured ? "bg-navy-900 text-white border-navy-800" : ""
                   }`}
                 >
