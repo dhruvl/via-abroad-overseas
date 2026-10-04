@@ -21,18 +21,17 @@ const serviceOptions = [...services.map((s) => s.title), "Not Sure Yet"];
 export function ContactForm() {
   const [submitted, setSubmitted] = React.useState(false);
   const [startedTracked, setStartedTracked] = React.useState(false);
-  const formRenderedAt = React.useRef(Date.now());
+  const [formRenderedAt] = React.useState(() => Date.now());
 
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormInput>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      formRenderedAt: formRenderedAt.current,
+      formRenderedAt,
       // When Turnstile isn't configured for this environment, the widget
       // never renders, so we seed a placeholder rather than permanently
       // blocking client-side validation. The server is the real gate:
@@ -44,7 +43,6 @@ export function ContactForm() {
     },
   });
 
-  const consent = watch("consent");
 
   function trackStart() {
     if (startedTracked) return;
@@ -59,7 +57,6 @@ export function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
-          [HONEYPOT_FIELD]: "",
           ...getStoredUtmAttribution(),
           source_path: window.location.pathname,
         }),
@@ -95,7 +92,7 @@ export function ContactForm() {
       {/* Honeypot — hidden from sighted and screen-reader users via aria-hidden + tabIndex, but present in the DOM for bots that blindly fill every field. */}
       <div className="absolute left-[-9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
         <label htmlFor={HONEYPOT_FIELD}>Company Website</label>
-        <input id={HONEYPOT_FIELD} name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" />
+        <input id={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" {...register(HONEYPOT_FIELD)} />
       </div>
 
       <Field label="Full Name" htmlFor="fullName" required error={errors.fullName?.message}>
@@ -167,7 +164,7 @@ export function ContactForm() {
         </p>
       )}
 
-      <Button type="submit" size="lg" disabled={isSubmitting || !consent} className="mt-2">
+      <Button type="submit" size="lg" disabled={isSubmitting} className="mt-2">
         {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
         Submit Enquiry
       </Button>

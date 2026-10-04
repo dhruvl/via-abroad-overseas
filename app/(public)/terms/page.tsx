@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <>
-      <PageHero eyebrow="Legal" title="Terms and Conditions" breadcrumb={[{ label: "Terms and Conditions" }]} />
+      <PageHero title="Terms and Conditions" breadcrumb={[{ label: "Terms and Conditions" }]} />
       <section className="bg-surface py-16 md:py-24">
         <Container className="prose prose-slate max-w-3xl prose-headings:font-display prose-headings:text-navy-900 prose-a:text-gold-700">
           <p className="text-sm text-ink-faint">Last updated: this policy is pending final legal review before launch.</p>

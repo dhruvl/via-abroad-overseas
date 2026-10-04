@@ -22,7 +22,7 @@ const faq = [
   {
     question: "What documents are required?",
     answer:
-      "Requirements vary by country, university, and course. Your counsellor will give you a checklist specific to your applications once your shortlist is finalized.",
+      "Requirements vary by country, university, and course. Your counsellor will give you a checklist specific to your applications once your shortlist is finalised.",
   },
   {
     question: "Do you help with visas?",

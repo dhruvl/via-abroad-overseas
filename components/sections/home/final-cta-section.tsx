@@ -6,11 +6,7 @@ import { business, callHref, whatsapp } from "@/lib/config";
 
 export function FinalCtaSection() {
   return (
-    <section className="relative overflow-hidden bg-navy-950 py-20 text-white md:py-28">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_100%,rgba(200,169,107,0.14),transparent)]"
-        aria-hidden="true"
-      />
+    <section className="relative overflow-hidden bg-navy-900 py-20 text-white md:py-28">
       <Container className="relative flex flex-col items-center gap-6 text-center">
         <Reveal>
           <Eyebrow light className="justify-center">

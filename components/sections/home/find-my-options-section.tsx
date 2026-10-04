@@ -12,8 +12,8 @@ export function FindMyOptionsSection() {
           </h2>
           <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-muted">
             Tell us about yourself. We&rsquo;ll help identify destinations and
-            options that fit your profile — three quick questions, then a
-            counsellor follows up personally.
+            options that fit your profile. Three quick questions and your
+            contact details, then a counsellor follows up personally.
           </p>
         </Reveal>
 

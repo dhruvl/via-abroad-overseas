@@ -92,7 +92,7 @@ describe("consultationFormSchema", () => {
       fullName: "Rohit Sharma",
       phone: "9876543210",
       email: "rohit@example.com",
-      currentQualification: "Undergraduate",
+      currentQualification: "Pursuing bachelor's",
       preferredCountry: "Canada",
       consent: true,
       ...baseAntiSpam,

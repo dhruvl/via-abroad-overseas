@@ -5,31 +5,24 @@ import {
   budgetRangeLabels,
   HONEYPOT_FIELD,
 } from "@/lib/validation/enquiry";
-import { MAX_REQUEST_BYTES } from "@/lib/security/spam-checks";
+import { readJsonRequestBody } from "@/lib/server/read-json-body";
 import { runEnquiryPipeline } from "@/lib/server/enquiry-pipeline";
 
 /**
  * Reuses the exact same validated enquiry pipeline as /contact and
  * /consultation (honeypot -> timing -> rate limit -> Turnstile -> DB
  * insert -> best-effort email), with its own schema. No database schema
- * change: `budgetRange` has no dedicated column, so it is folded into the
- * free-text `message` field alongside the chosen education level and
- * destination. See the redesign report's "Backend Integration Required"
- * note for the smallest structured follow-up if the business wants a
- * dedicated, queryable budget column later.
+ * change: education level maps to `current_qualification`, destination to
+ * `interested_country`, and `budgetRange` (no dedicated column) is folded
+ * into the free-text `message`. All three are therefore stored in Supabase,
+ * shown in the admin dashboard, and included in the business notification
+ * email. Add a dedicated budget column later if it needs to be queryable.
  */
 export async function POST(request: Request) {
-  const rawBody = await request.text();
-  if (rawBody.length > MAX_REQUEST_BYTES) {
-    return NextResponse.json({ error: "Request payload too large." }, { status: 413 });
-  }
-
-  let payload: unknown;
-  try {
-    payload = JSON.parse(rawBody);
-  } catch {
-    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
-  }
+  // Size (413) and Content-Type (415) guards run before the body is parsed.
+  const body = await readJsonRequestBody(request);
+  if (!body.ok) return body.response;
+  const payload = body.payload;
 
   const parsed = findMyOptionsSchema.safeParse(payload);
   if (!parsed.success) {
@@ -59,7 +52,7 @@ export async function POST(request: Request) {
       interested_country: data.preferredDestination,
       service_required: "Find My Options",
       current_qualification: data.educationLevel,
-      message: `Find My Options enquiry. Approximate budget: ${budgetLabel}.`,
+      message: `Find My Options enquiry. Approximate budget (per year, tuition + living): ${budgetLabel}.`,
       consent: data.consent,
     },
     attribution: attribution.success ? attribution.data : {},

@@ -16,7 +16,7 @@ const iconMap: Record<Service["icon"], typeof Compass> = {
 
 export function ServicesSection() {
   return (
-    <section className="bg-surface-muted py-20 md:py-28">
+    <section className="bg-surface py-20 md:py-28">
       <Container>
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <Reveal>
@@ -46,7 +46,6 @@ export function ServicesSection() {
               <Reveal
                 key={service.slug}
                 delay={(index % 3) * 0.08}
-                className={featured ? "sm:col-span-2 lg:col-span-1 lg:row-span-2" : ""}
               >
                 <Link
                   href={`/services/${service.slug}`}
@@ -69,7 +68,7 @@ export function ServicesSection() {
                     <h3
                       className={cn(
                         "mt-5 font-display font-semibold",
-                        featured ? "text-2xl text-white lg:text-3xl" : "text-xl text-navy-900"
+                        featured ? "text-xl text-white" : "text-xl text-navy-900"
                       )}
                     >
                       {service.title}
@@ -77,7 +76,7 @@ export function ServicesSection() {
                     <p
                       className={cn(
                         "mt-2.5 leading-relaxed",
-                        featured ? "max-w-sm text-base text-white/75" : "text-sm text-ink-muted"
+                        featured ? "text-sm text-white/75" : "text-sm text-ink-muted"
                       )}
                     >
                       {service.shortDescription}

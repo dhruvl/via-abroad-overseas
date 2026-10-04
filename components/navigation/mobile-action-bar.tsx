@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Phone, CalendarCheck } from "lucide-react";
 import { whatsapp, callHref } from "@/lib/config";
 import { trackEvent } from "@/lib/analytics/events";
@@ -15,6 +16,7 @@ import { cn } from "@/lib/utils";
  */
 export function MobileActionBar() {
   const whatsappHref = whatsapp.href();
+  const onBookingPage = usePathname() === "/book-consultation";
 
   const item =
     "flex min-h-14 flex-1 flex-col items-center justify-center gap-1 text-[0.7rem] font-semibold uppercase tracking-[0.12em] transition-colors";
@@ -28,7 +30,9 @@ export function MobileActionBar() {
       <div className="flex items-stretch">
         <a
           href={callHref}
-          onClick={() => trackEvent("call_clicked", { source: "mobile_action_bar" })}
+          onClick={() =>
+            trackEvent("call_clicked", { source: "mobile_action_bar" })
+          }
           className={cn(item, "text-white/85 active:bg-white/5")}
         >
           <Phone className="h-5 w-5" aria-hidden="true" />
@@ -39,21 +43,32 @@ export function MobileActionBar() {
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => trackEvent("whatsapp_clicked", { source: "mobile_action_bar" })}
-            className={cn(item, "border-l border-white/10 text-white/85 active:bg-white/5")}
+            onClick={() =>
+              trackEvent("whatsapp_clicked", { source: "mobile_action_bar" })
+            }
+            className={cn(
+              item,
+              "border-l border-white/10 text-white/85 active:bg-white/5",
+            )}
           >
             <WhatsAppIcon className="h-5 w-5" />
             WhatsApp
           </a>
         )}
-        <Link
-          href="/book-consultation"
-          onClick={() => trackEvent("consultation_cta_clicked", { source: "mobile_action_bar" })}
-          className={cn(item, "bg-gold-500 text-navy-950 active:bg-gold-400")}
-        >
-          <CalendarCheck className="h-5 w-5" aria-hidden="true" />
-          Free Consult
-        </Link>
+        {!onBookingPage && (
+          <Link
+            href="/book-consultation"
+            onClick={() =>
+              trackEvent("consultation_cta_clicked", {
+                source: "mobile_action_bar",
+              })
+            }
+            className={cn(item, "bg-gold-500 text-navy-950 active:bg-gold-400")}
+          >
+            <CalendarCheck className="h-5 w-5" aria-hidden="true" />
+            Free Consult
+          </Link>
+        )}
       </div>
     </nav>
   );

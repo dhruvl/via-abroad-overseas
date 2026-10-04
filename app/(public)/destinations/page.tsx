@@ -24,8 +24,7 @@ export default function DestinationsPage() {
   return (
     <>
       <PageHero
-        eyebrow="Study Destinations"
-        title="Your world starts here."
+        title="Study destinations"
         description="Explore popular study destinations. Requirements and policies vary by country and can change — your counsellor will confirm current details for your specific plans."
         breadcrumb={[{ label: "Destinations" }]}
       />

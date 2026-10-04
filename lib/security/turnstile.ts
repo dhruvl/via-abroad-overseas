@@ -1,4 +1,5 @@
 import "server-only";
+import { siteUrl } from "@/lib/config";
 
 const VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
@@ -35,6 +36,52 @@ export function isDevTurnstileBypassAllowed(
   );
 }
 
+function hostOf(value: string | undefined) {
+  const trimmed = value?.trim();
+  if (!trimmed) return undefined;
+  try {
+    return new URL(/^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`).hostname.toLowerCase();
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Checks the `hostname` Siteverify reports the token was solved on, so a
+ * token minted on some other site using our (public) site key is rejected.
+ * Accepted: the configured site host (NEXT_PUBLIC_SITE_URL, the Vercel
+ * production domain, or the resolved `siteUrl`), any `*.vercel.app`
+ * preview/production host, and `localhost` outside production runtimes.
+ * Anything else — including a missing hostname — fails closed.
+ */
+export function isAllowedTurnstileHostname(
+  hostname: unknown,
+  env: {
+    NODE_ENV?: string;
+    VERCEL_ENV?: string;
+    NEXT_PUBLIC_SITE_URL?: string;
+    VERCEL_PROJECT_PRODUCTION_URL?: string;
+  } = process.env,
+  resolvedSiteUrl: string = siteUrl
+): boolean {
+  if (typeof hostname !== "string") return false;
+  const host = hostname.trim().toLowerCase().replace(/\.$/, "");
+  if (!host) return false;
+
+  const isProductionRuntime =
+    env.NODE_ENV === "production" || env.VERCEL_ENV === "production";
+  if (host === "localhost") return !isProductionRuntime;
+
+  const expectedHosts = [
+    hostOf(env.NEXT_PUBLIC_SITE_URL),
+    hostOf(env.VERCEL_PROJECT_PRODUCTION_URL),
+    hostOf(resolvedSiteUrl),
+  ];
+  if (expectedHosts.includes(host)) return true;
+
+  return /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.vercel\.app$/.test(host);
+}
+
 /**
  * Verifies a Turnstile token server-side. The client-side widget alone is
  * never trusted — every form submission is re-checked here before any
@@ -68,8 +115,8 @@ export async function verifyTurnstileToken(
     });
 
     if (!response.ok) return false;
-    const result = (await response.json()) as { success: boolean };
-    return result.success === true;
+    const result = (await response.json()) as { success?: boolean; hostname?: unknown };
+    return result.success === true && isAllowedTurnstileHostname(result.hostname);
   } catch {
     // Network failure talking to Cloudflare — fail closed.
     return false;

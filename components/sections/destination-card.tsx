@@ -5,9 +5,9 @@ import type { Destination } from "@/data/destinations";
 import { cn } from "@/lib/utils";
 
 /**
- * Cinematic destination card (brief §06): full-bleed photograph, dark
- * gradient rising from the bottom, and all copy anchored low so it never
- * sits over the busy middle of the image or the student's face.
+ * Destination photo card — the original design (landscape proportions, an
+ * even navy wash over the whole photograph, flag + name + line up top and
+ * the explore link at the foot), shared by the homepage and /destinations.
  *
  * Only for destinations with real photography — the /destinations page
  * lists the rest in a separate typographic index instead of mixing in
@@ -28,7 +28,7 @@ export function DestinationCard({
     <Link
       href={`/destinations/${destination.slug}`}
       className={cn(
-        "group relative flex h-full min-h-[340px] flex-col justify-end overflow-hidden rounded-2xl border border-white/10 bg-navy-900 p-6 text-white transition-colors duration-300 hover:border-gold-400/50 lg:min-h-[380px]",
+        "group relative flex h-full min-h-[220px] flex-col justify-between overflow-hidden rounded-2xl border border-transparent bg-gradient-to-br from-navy-800 to-navy-900 p-6 text-white transition-colors duration-300 hover:border-gold-400/60",
         className
       )}
     >
@@ -41,14 +41,20 @@ export function DestinationCard({
         className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-t from-navy-950 from-15% via-navy-950/70 via-45% to-navy-950/0 to-75%"
+        className="absolute inset-0 bg-gradient-to-t from-navy-950/95 via-navy-950/60 to-navy-950/45"
         aria-hidden="true"
       />
       <div className="relative z-10">
-        <Heading className="font-display text-2xl font-semibold">{destination.name}</Heading>
+        <span
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-sm"
+          aria-hidden="true"
+        >
+          {destination.flag}
+        </span>
+        <Heading className="mt-4 font-display text-xl font-semibold">{destination.name}</Heading>
         <p className="mt-2 text-sm leading-relaxed text-white/80">{destination.tagline}</p>
       </div>
-      <span className="relative z-10 mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-300">
+      <span className="relative z-10 mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-300">
         Explore {destination.name}
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
       </span>

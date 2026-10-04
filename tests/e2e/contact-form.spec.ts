@@ -1,16 +1,16 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Contact form", () => {
-  test("submit is disabled until consent is given, then shows validation errors", async ({ page }) => {
+  test("submitting without consent explains why instead of a silent disabled button", async ({ page }) => {
     await page.goto("/contact");
     const submit = page.getByRole("button", { name: "Submit Enquiry" });
-    await expect(submit).toBeDisabled();
-
-    await page.getByLabel(/I agree that VIA ABROAD OVERSEAS/).check();
     await expect(submit).toBeEnabled();
 
     await submit.click();
     await expect(page.getByText("Please enter your full name.")).toBeVisible();
+    await expect(
+      page.getByText("Please confirm you agree to be contacted before submitting.")
+    ).toBeVisible();
   });
 
   test("rejects a submission with an invalid email once fields are filled", async ({ page }) => {

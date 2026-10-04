@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/motion/reveal";
+import { ConsultationCtaLink } from "@/components/analytics/consultation-cta-link";
 
 const steps = [
   {
@@ -107,6 +108,12 @@ export function ProcessSection() {
             </Reveal>
           ))}
         </ol>
+
+        <Reveal className="mt-14 flex flex-col items-center gap-3 text-center">
+          <ConsultationCtaLink source="home_process" size="lg">
+            Start with Step 1: Free Consultation
+          </ConsultationCtaLink>
+        </Reveal>
       </Container>
     </section>
   );

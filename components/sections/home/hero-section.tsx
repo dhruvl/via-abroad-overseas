@@ -43,7 +43,7 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
-      <Container className="w-full pb-24 pt-[36svh] md:pb-24 lg:py-40">
+      <Container className="w-full pb-24 pt-[33svh] md:pb-24 lg:py-40">
         <div className="max-w-[46rem]">
           <p
             className="hero-rise flex items-center gap-3 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-gold-300 sm:text-xs"
@@ -71,13 +71,20 @@ export function HeroSection() {
           </p>
 
           <div
-            className="hero-rise mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
+            className="hero-rise mt-7 flex flex-col gap-2 sm:mt-8 sm:flex-row sm:items-center sm:gap-4"
             style={{ "--hero-step": 3 } as React.CSSProperties}
           >
             <ConsultationCtaLink source="home_hero" size="lg">
               Book Free Consultation
             </ConsultationCtaLink>
-            <Button asChild size="lg" variant="outline">
+            {/* Phones: a quiet text link, so the primary CTA leads and both
+                clear the bottom action bar in the first viewport. */}
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="max-sm:h-11 max-sm:border-transparent max-sm:bg-transparent max-sm:underline max-sm:decoration-gold-400 max-sm:underline-offset-4"
+            >
               <Link href="/destinations">
                 Explore Destinations
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />

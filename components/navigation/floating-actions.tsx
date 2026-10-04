@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
 import { Phone, CalendarCheck } from "lucide-react";
 import { whatsapp, callHref } from "@/lib/config";
 import { trackEvent } from "@/lib/analytics/events";
@@ -24,47 +23,38 @@ export function FloatingActions() {
       className="fixed bottom-6 right-6 z-40 hidden flex-col items-end gap-3 md:flex"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <motion.a
+      <a
         href={callHref}
-        initial={{ opacity: 0, scale: 0.8, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        style={{ animationDelay: "600ms" }}
         onClick={() => trackEvent("call_clicked", { source: "floating_action" })}
         aria-label="Call VIA ABROAD OVERSEAS"
-        className="flex h-13 w-13 items-center justify-center rounded-full bg-navy-900 text-white shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
+        className="pop-in flex h-13 w-13 items-center justify-center rounded-full bg-navy-900 text-white shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
       >
         <Phone className="h-5 w-5" aria-hidden="true" />
-      </motion.a>
+      </a>
 
-      <motion.span
-        initial={{ opacity: 0, scale: 0.8, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ delay: 0.45, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      <Link
+        href="/book-consultation"
+        style={{ animationDelay: "450ms" }}
+        onClick={() => trackEvent("consultation_cta_clicked", { source: "floating_action" })}
+        aria-label="Book a free consultation with VIA ABROAD OVERSEAS"
+        className="pop-in flex h-13 w-13 items-center justify-center rounded-full bg-gold-500 text-navy-950 shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
       >
-        <Link
-          href="/book-consultation"
-          onClick={() => trackEvent("consultation_cta_clicked", { source: "floating_action" })}
-          aria-label="Book a free consultation with VIA ABROAD OVERSEAS"
-          className="flex h-13 w-13 items-center justify-center rounded-full bg-gold-500 text-navy-950 shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
-        >
-          <CalendarCheck className="h-5 w-5" aria-hidden="true" />
-        </Link>
-      </motion.span>
+        <CalendarCheck className="h-5 w-5" aria-hidden="true" />
+      </Link>
 
       {href && (
-        <motion.a
+        <a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          initial={{ opacity: 0, scale: 0.8, y: 12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          style={{ animationDelay: "350ms" }}
           onClick={() => trackEvent("whatsapp_clicked", { source: "floating_action" })}
           aria-label="Chat with VIA ABROAD OVERSEAS on WhatsApp"
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
+          className="pop-in flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
         >
           <WhatsAppIcon className="h-6 w-6" />
-        </motion.a>
+        </a>
       )}
     </div>
   );

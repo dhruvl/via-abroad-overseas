@@ -8,13 +8,14 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/motion/reveal";
+import { ConsultationCtaLink } from "@/components/analytics/consultation-cta-link";
 
 const benefits = [
   {
     number: "01",
     title: "Profile First",
     icon: UserRound,
-    description: "We start with your academics, budget, and goals — not a generic shortlist.",
+    description: "We look at your marks, budget and goals before naming a single university.",
   },
   {
     number: "02",
@@ -88,6 +89,12 @@ export function WhyChooseSection() {
             );
           })}
         </div>
+
+        <Reveal className="mt-12 flex justify-center">
+          <ConsultationCtaLink source="home_why" size="lg" variant="outlineNavy">
+            Talk to a Counsellor
+          </ConsultationCtaLink>
+        </Reveal>
       </Container>
     </section>
   );

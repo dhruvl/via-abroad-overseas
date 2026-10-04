@@ -10,7 +10,7 @@ import { Reveal } from "@/components/motion/reveal";
  */
 export function UniversitiesTeaserSection() {
   return (
-    <section className="bg-surface-muted py-16 md:py-20">
+    <section className="bg-surface py-16 md:py-20">
       <Container className="flex flex-col items-center gap-5 text-center">
         <Reveal>
           <h2 className="text-balance font-display text-[clamp(1.5rem,3vw,2.25rem)] font-semibold text-navy-900">
@@ -26,7 +26,7 @@ export function UniversitiesTeaserSection() {
             href="/universities"
             className="inline-flex items-center gap-2 rounded-full bg-navy-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-800"
           >
-            Find My University
+            Get My University Shortlist
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </Reveal>

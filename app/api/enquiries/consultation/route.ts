@@ -1,20 +1,13 @@
 import { NextResponse } from "next/server";
 import { consultationFormSchema, attributionSchema, HONEYPOT_FIELD } from "@/lib/validation/enquiry";
-import { MAX_REQUEST_BYTES } from "@/lib/security/spam-checks";
+import { readJsonRequestBody } from "@/lib/server/read-json-body";
 import { runEnquiryPipeline } from "@/lib/server/enquiry-pipeline";
 
 export async function POST(request: Request) {
-  const rawBody = await request.text();
-  if (rawBody.length > MAX_REQUEST_BYTES) {
-    return NextResponse.json({ error: "Request payload too large." }, { status: 413 });
-  }
-
-  let payload: unknown;
-  try {
-    payload = JSON.parse(rawBody);
-  } catch {
-    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
-  }
+  // Size (413) and Content-Type (415) guards run before the body is parsed.
+  const body = await readJsonRequestBody(request);
+  if (!body.ok) return body.response;
+  const payload = body.payload;
 
   const parsed = consultationFormSchema.safeParse(payload);
   if (!parsed.success) {

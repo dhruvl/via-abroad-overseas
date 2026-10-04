@@ -20,9 +20,8 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        eyebrow="Contact Us"
-        title="Let's Start the Conversation"
-        description="Reach out by phone, email, or WhatsApp, or send us your enquiry directly below."
+        title="Talk to a counsellor"
+        description="Call, email or send an enquiry below, and a counsellor will get back to you."
         breadcrumb={[{ label: "Contact" }]}
       />
 

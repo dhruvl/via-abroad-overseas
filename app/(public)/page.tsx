@@ -16,7 +16,7 @@ import { FinalCtaSection } from "@/components/sections/home/final-cta-section";
 export const metadata: Metadata = {
   title: "Study Abroad & Overseas Education Consultancy",
   description:
-    "VIA ABROAD OVERSEAS helps students achieve their study abroad goals with expert counselling, university admissions support, visa assistance, and career guidance.",
+    "Study abroad consultancy in Nizampet, Hyderabad. Help choosing a country, course and university, with applications, visas and career planning. First consultation free.",
   alternates: { canonical: "/" },
 };
 
