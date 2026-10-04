@@ -29,7 +29,7 @@ export function FloatingActions() {
         transition={{ delay: 0.6, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         onClick={() => trackEvent("call_clicked", { source: "floating_action" })}
         aria-label="Call VIA ABROAD OVERSEAS"
-        className="flex h-13 w-13 items-center justify-center rounded-full bg-navy-900 text-white shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
+        className="flex h-13 w-13 items-center justify-center rounded-full bg-navy-900 text-white shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 focus-visible:ring-offset-2"
       >
         <Phone className="h-5 w-5" aria-hidden="true" />
       </motion.a>
@@ -43,7 +43,7 @@ export function FloatingActions() {
           href="/book-consultation"
           onClick={() => trackEvent("consultation_cta_clicked", { source: "floating_action" })}
           aria-label="Book a free consultation with VIA ABROAD OVERSEAS"
-          className="flex h-13 w-13 items-center justify-center rounded-full bg-gold-500 text-navy-950 shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
+          className="flex h-13 w-13 items-center justify-center rounded-full bg-gold-500 text-navy-950 shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 focus-visible:ring-offset-2"
         >
           <CalendarCheck className="h-5 w-5" aria-hidden="true" />
         </Link>
@@ -59,7 +59,7 @@ export function FloatingActions() {
           transition={{ delay: 0.35, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           onClick={() => trackEvent("whatsapp_clicked", { source: "floating_action" })}
           aria-label="Chat with VIA ABROAD OVERSEAS on WhatsApp"
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 focus-visible:ring-offset-2"
         >
           <WhatsAppIcon className="h-6 w-6" />
         </motion.a>

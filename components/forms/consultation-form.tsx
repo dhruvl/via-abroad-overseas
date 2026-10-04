@@ -157,7 +157,8 @@ export function ConsultationForm() {
         <input
           id="consent"
           type="checkbox"
-          className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+          required
+          className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700"
           {...register("consent")}
         />
         <label htmlFor="consent" className="text-sm text-ink-muted">

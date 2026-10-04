@@ -164,7 +164,7 @@ export function FindMyOptionsWizard() {
             <legend className="font-display text-xl font-semibold text-navy-900">
               What did you study?
             </legend>
-            <OptionGrid name="educationLevel" options={educationOptions} register={register} />
+            <OptionGrid name="educationLevel" label="Education level" options={educationOptions} register={register} />
             {errors.educationLevel && (
               <p role="alert" className="mt-3 text-xs font-medium text-error">
                 {errors.educationLevel.message}
@@ -180,6 +180,7 @@ export function FindMyOptionsWizard() {
             </legend>
             <OptionGrid
               name="budgetRange"
+              label="Approximate budget"
               options={budgetOptions}
               labels={budgetRangeLabels}
               register={register}
@@ -197,7 +198,7 @@ export function FindMyOptionsWizard() {
             <legend className="font-display text-xl font-semibold text-navy-900">
               Preferred destination?
             </legend>
-            <OptionGrid name="preferredDestination" options={destinationOptions} register={register} />
+            <OptionGrid name="preferredDestination" label="Preferred destination" options={destinationOptions} register={register} />
             {errors.preferredDestination && (
               <p role="alert" className="mt-3 text-xs font-medium text-error">
                 {errors.preferredDestination.message}
@@ -234,7 +235,8 @@ export function FindMyOptionsWizard() {
               <input
                 id="fmo-consent"
                 type="checkbox"
-                className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+                required
+                className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700"
                 {...register("consent")}
               />
               <label htmlFor="fmo-consent" className="text-sm text-ink-muted">
@@ -282,17 +284,19 @@ export function FindMyOptionsWizard() {
 
 function OptionGrid<Name extends "educationLevel" | "budgetRange" | "preferredDestination">({
   name,
+  label,
   options,
   labels,
   register,
 }: {
   name: Name;
+  label: string;
   options: readonly string[];
   labels?: Record<string, string>;
   register: ReturnType<typeof useForm<FindMyOptionsInput>>["register"];
 }) {
   return (
-    <div role="radiogroup" aria-label={name} className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+    <div role="radiogroup" aria-label={label} aria-required="true" className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
       {options.map((option) => {
         const id = `${name}-${option}`;
         return (
@@ -306,7 +310,7 @@ function OptionGrid<Name extends "educationLevel" | "budgetRange" | "preferredDe
             />
             <label
               htmlFor={id}
-              className="flex h-14 cursor-pointer items-center justify-center rounded-xl border border-border-strong bg-surface px-3 text-center text-sm font-semibold text-navy-900 transition-colors hover:border-gold-400 peer-checked:border-navy-900 peer-checked:bg-navy-900 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-gold-500"
+              className="flex h-14 cursor-pointer items-center justify-center rounded-xl border border-border-strong bg-surface px-3 text-center text-sm font-semibold text-navy-900 transition-colors hover:border-gold-400 peer-checked:border-navy-900 peer-checked:bg-navy-900 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-gold-700"
             >
               {labels?.[option] ?? option}
             </label>

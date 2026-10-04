@@ -21,6 +21,7 @@ export function Field({
     ? React.cloneElement(
         children as React.ReactElement<Record<string, unknown>>,
         {
+          required: required || undefined,
           "aria-invalid": error ? "true" : undefined,
           "aria-describedby": error ? errorId : undefined,
         }
@@ -49,10 +50,10 @@ export function Field({
 }
 
 export const inputClassName =
-  "h-12 w-full rounded-xl border border-border-strong bg-surface px-4 text-sm text-ink placeholder:text-ink-faint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:border-gold-500 disabled:opacity-50 aria-[invalid=true]:border-error";
+  "h-12 w-full rounded-xl border border-border-strong bg-surface px-4 text-sm text-ink placeholder:text-ink-faint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 focus-visible:border-gold-500 disabled:opacity-50 aria-[invalid=true]:border-error";
 
 export const textareaClassName =
-  "w-full rounded-xl border border-border-strong bg-surface px-4 py-3 text-sm text-ink placeholder:text-ink-faint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:border-gold-500 disabled:opacity-50 aria-[invalid=true]:border-error";
+  "w-full rounded-xl border border-border-strong bg-surface px-4 py-3 text-sm text-ink placeholder:text-ink-faint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 focus-visible:border-gold-500 disabled:opacity-50 aria-[invalid=true]:border-error";
 
 export const selectClassName =
-  "h-12 w-full rounded-xl border border-border-strong bg-surface px-4 text-sm text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:border-gold-500 disabled:opacity-50 aria-[invalid=true]:border-error";
+  "h-12 w-full rounded-xl border border-border-strong bg-surface px-4 text-sm text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 focus-visible:border-gold-500 disabled:opacity-50 aria-[invalid=true]:border-error";

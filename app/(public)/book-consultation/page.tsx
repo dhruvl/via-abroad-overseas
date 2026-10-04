@@ -29,7 +29,7 @@ export default function BookConsultationPage() {
       />
 
       <section className="bg-surface py-20 md:py-28">
-        <Container className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+        <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="space-y-6">
             <Reveal>
               <h2 className="font-display text-xl font-semibold text-navy-900">
