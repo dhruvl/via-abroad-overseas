@@ -90,8 +90,13 @@ email address that owns the Resend account.** So today:
 ## 4. Cloudflare Turnstile
 
 1. Create a Turnstile widget in the Cloudflare dashboard.
-2. Restrict it to your production hostname(s) (and Vercel preview domains
-   if you want bot protection on previews too).
+2. Restrict it to the canonical production hostname configured by
+   `NEXT_PUBLIC_SITE_URL`. Server verification requires an exact hostname
+   match and validates each endpoint's action. The production deployment
+   never accepts Vercel preview (or any other `*.vercel.app`) hostnames;
+   use the production hostname for real enquiries. A preview deployment
+   accepts only its own `VERCEL_URL` / `VERCEL_BRANCH_URL`, and only if you
+   also add that preview domain to the widget's hostname list in Cloudflare.
 3. Set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`.
 4. Confirm `ALLOW_UNVERIFIED_TURNSTILE_IN_DEV` is **not** set in
    production environment variables.

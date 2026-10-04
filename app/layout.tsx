@@ -3,6 +3,7 @@ import { Manrope, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 import { OrganizationJsonLd } from "@/components/seo/organization-jsonld";
 import { Toaster } from "@/components/ui/toaster";
+import { SkipToContent } from "@/components/navigation/skip-to-content";
 import { siteUrl, business } from "@/lib/config";
 
 const manrope = Manrope({
@@ -69,12 +70,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-surface-muted text-ink">
         <OrganizationJsonLd />
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-navy-900 focus:px-4 focus:py-2 focus:text-white"
-        >
-          Skip to main content
-        </a>
+        <SkipToContent />
         {children}
         <Toaster />
       </body>

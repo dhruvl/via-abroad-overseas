@@ -83,10 +83,12 @@ retrying.
 Every public form submission (`/api/enquiries/contact`, `/consultation`,
 and `/find-my-options`) passes through, in order:
 
-1. Body guard (`lib/server/read-json-body.ts`): a `Content-Length` over
-   `MAX_REQUEST_BYTES` is rejected with 413 before reading; anything other
-   than `Content-Type: application/json` gets 415; the body is streamed and
-   counted in bytes, aborting with 413 once the cap is crossed.
+1. Body guard (`lib/server/read-json-body.ts` over
+   `lib/server/bounded-json.ts`): anything other than
+   `Content-Type: application/json` gets 415; a `Content-Length` over
+   `MAX_REQUEST_BYTES` (20,000 bytes) is rejected with 413 before reading;
+   the body is streamed and counted in UTF-8 bytes, cancelling the stream
+   with 413 once the cap is crossed; invalid UTF-8 or malformed JSON gets 400.
 2. Zod schema validation (never trusts client-side pass/fail). Names are
    restricted to letters, combining marks, spaces and `. ' ’ -`.
 3. Honeypot field check. The schema accepts any honeypot value on purpose,
@@ -96,15 +98,30 @@ and `/find-my-options`) passes through, in order:
 4. Submission-timing heuristic (rejects implausibly instant or stale forms).
 5. Per-source Upstash limits (per-IP and per-fingerprint) — cheap, so they
    run before any call to Cloudflare.
-6. Cloudflare Turnstile server-side verification, including a check that
-   the Siteverify `hostname` is the configured site host, a `*.vercel.app`
-   host, or `localhost` outside production (**fails closed** when
-   unconfigured, unless `ALLOW_UNVERIFIED_TURNSTILE_IN_DEV=true` is
-   explicitly set for local development).
+6. Cloudflare Turnstile server-side verification (`lib/security/turnstile.ts`,
+   8-second provider timeout). A token passes only if Siteverify reports
+   success, the reported `hostname` is allowed, and the reported `action`
+   matches the endpoint (`contact`, `consultation`, `find_my_options`).
+   Allowed hostnames are exact matches only: the host of
+   `NEXT_PUBLIC_SITE_URL` and of `VERCEL_PROJECT_PRODUCTION_URL`; on a Vercel
+   *preview* deployment, that deployment's own `VERCEL_URL` /
+   `VERCEL_BRANCH_URL`; and `localhost`/`127.0.0.1` outside production. The
+   production deployment never accepts preview or other `*.vercel.app`
+   hosts, and a production build whose configured host is loopback is
+   treated as unconfigured. Missing configuration (secret key or allowed
+   hostname) **fails closed**, unless `ALLOW_UNVERIFIED_TURNSTILE_IN_DEV=true`
+   is explicitly set outside production. Invalid, foreign-host, or
+   wrong-action tokens get a generic 400; provider or configuration failures
+   get a generic 503, logged with only a fixed reason code (never the token
+   or provider details).
 7. Per-recipient Upstash limits (per-email and per-email+phone pair). These
    run only after Turnstile passes, so requests with invalid tokens cannot
    exhaust a victim's quota.
 8. Database insert (source of truth), then best-effort emails.
+
+Turnstile's provider-issued tokens are treated as short-lived and single-use.
+The application does not cache or retry a token or maintain a separate replay
+database.
 
 See `lib/server/enquiry-pipeline.ts` for the implementation. The student
 confirmation email greets the recipient neutrally and echoes no submitted
@@ -169,8 +186,9 @@ client as the dashboard (not the secret key), so RLS applies to exports too.
   business configuration and content (`components/seo/*-jsonld.tsx`), and
   every `<` in that JSON is escaped as `\u003c` so no value can close the
   `<script>` element.
-- Request bodies are size-capped in bytes before parsing
-  (`MAX_REQUEST_BYTES`, 413) and must be `application/json` (415).
+- Enquiry request bodies must be `application/json` (415) and are
+  size-capped in UTF-8 bytes while streaming, before JSON parsing
+  (`MAX_REQUEST_BYTES`, 413).
 
 ## Security Headers
 

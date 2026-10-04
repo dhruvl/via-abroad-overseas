@@ -26,7 +26,7 @@ export default function ContactPage() {
       />
 
       <section className="bg-surface py-20 md:py-28">
-        <Container className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+        <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="space-y-8">
             <Reveal className="rounded-2xl border border-border-subtle bg-surface-muted p-7">
               <h2 className="font-display text-xl font-semibold text-navy-900">

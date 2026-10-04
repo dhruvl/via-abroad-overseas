@@ -24,6 +24,7 @@ export type EnquiryPipelineInput = {
   honeypotValue: string | undefined;
   formRenderedAt: number;
   turnstileToken: string;
+  expectedTurnstileAction: string;
   record: Omit<NewEnquiryRecord, "abuse_fingerprint">;
   attribution: Attribution;
 };
@@ -31,7 +32,7 @@ export type EnquiryPipelineInput = {
 const GENERIC_ERROR = {
   error: "We couldn't process your submission. Please try again in a moment.",
 };
-const RATE_LIMIT_UNAVAILABLE = {
+const SERVICE_UNAVAILABLE = {
   error: "Service temporarily unavailable. Please try again shortly.",
 };
 
@@ -46,7 +47,7 @@ function tooManySubmissions() {
 function abuseProtectionUnavailable(error: unknown) {
   const reason = error instanceof RateLimitUnavailableError ? error.reason : "fingerprint_unavailable";
   console.error("[enquiry] Abuse protection unavailable.", { reason });
-  return NextResponse.json(RATE_LIMIT_UNAVAILABLE, { status: 503 });
+  return NextResponse.json(SERVICE_UNAVAILABLE, { status: 503 });
 }
 
 export async function runEnquiryPipeline({
@@ -54,6 +55,7 @@ export async function runEnquiryPipeline({
   honeypotValue,
   formRenderedAt,
   turnstileToken,
+  expectedTurnstileAction,
   record,
   attribution,
 }: EnquiryPipelineInput): Promise<NextResponse> {
@@ -87,8 +89,21 @@ export async function runEnquiryPipeline({
   }
 
   // 4. Bot challenge — always re-verified server-side.
-  const turnstileValid = await verifyTurnstileToken(turnstileToken, ip);
-  if (!turnstileValid) {
+  const turnstileResult = await verifyTurnstileToken({
+    token: turnstileToken,
+    expectedAction: expectedTurnstileAction,
+    remoteIp: ip,
+  });
+  if (!turnstileResult.valid) {
+    if (
+      turnstileResult.reason === "provider_unavailable" ||
+      turnstileResult.reason === "configuration_missing"
+    ) {
+      console.error("[enquiry] Turnstile verification unavailable.", {
+        reason: turnstileResult.reason,
+      });
+      return NextResponse.json(SERVICE_UNAVAILABLE, { status: 503 });
+    }
     return NextResponse.json(
       { error: "We couldn't verify your submission. Please try again." },
       { status: 400 }

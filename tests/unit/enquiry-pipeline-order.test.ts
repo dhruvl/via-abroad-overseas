@@ -36,6 +36,7 @@ function run(userAgent = "browser-agent") {
     honeypotValue: undefined,
     formRenderedAt: Date.now() - 10_000,
     turnstileToken: "turnstile-token",
+    expectedTurnstileAction: "contact",
     record: {
       enquiry_type: "general",
       full_name: "Test Person",
@@ -57,12 +58,12 @@ describe("enquiry pipeline ordering", () => {
     mocks.fingerprintLimit.mockResolvedValue(ok);
     mocks.contactLimit.mockResolvedValue(ok);
     mocks.emailLimit.mockResolvedValue(ok);
-    mocks.verifyTurnstile.mockResolvedValue(true);
+    mocks.verifyTurnstile.mockResolvedValue({ valid: true });
     mocks.insertEnquiry.mockResolvedValue({ id: "id-1", created_at: "2026-10-04T00:00:00Z" });
   });
 
   it("does not touch the per-email/per-contact quota when Turnstile fails", async () => {
-    mocks.verifyTurnstile.mockResolvedValue(false);
+    mocks.verifyTurnstile.mockResolvedValue({ valid: false, reason: "provider_rejected" });
     const response = await run();
     expect(response.status).toBe(400);
     expect(mocks.ipLimit).toHaveBeenCalledTimes(1);

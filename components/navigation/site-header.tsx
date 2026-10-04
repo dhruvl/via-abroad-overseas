@@ -14,6 +14,7 @@ export function SiteHeader() {
   const isHome = pathname === "/";
   const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const mobileMenuButtonRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
     if (!isHome) return;
@@ -34,6 +35,19 @@ export function SiteHeader() {
     return () => {
       document.body.style.overflow = "";
     };
+  }, [mobileOpen]);
+
+  React.useEffect(() => {
+    if (!mobileOpen) return;
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      setMobileOpen(false);
+      mobileMenuButtonRef.current?.focus();
+    }
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
   }, [mobileOpen]);
 
   const isTransparent = isHome && !scrolled && !mobileOpen;
@@ -109,9 +123,10 @@ export function SiteHeader() {
         <div className="flex items-center gap-2 lg:hidden">
           {/* Phones use the bottom action bar for this; avoid a second gold CTA. */}
           <Button asChild size="sm" className="hidden px-4 md:inline-flex">
-            <Link href={primaryCta.href}>Book Consultation</Link>
+            <Link href={primaryCta.href}>{primaryCta.label}</Link>
           </Button>
           <button
+            ref={mobileMenuButtonRef}
             type="button"
             className="flex h-11 w-11 items-center justify-center rounded-full text-white"
             aria-expanded={mobileOpen}

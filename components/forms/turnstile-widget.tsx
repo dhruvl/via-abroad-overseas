@@ -11,6 +11,7 @@ declare global {
         container: HTMLElement,
         options: {
           sitekey: string;
+          action: string;
           callback: (token: string) => void;
           "expired-callback"?: () => void;
           "error-callback"?: () => void;
@@ -29,7 +30,13 @@ declare global {
  * server independently decides whether unverified submissions are
  * permitted (fails closed by default, see lib/security/turnstile.ts).
  */
-export function TurnstileWidget({ onVerify }: { onVerify: (token: string) => void }) {
+export function TurnstileWidget({
+  action,
+  onVerify,
+}: {
+  action: string;
+  onVerify: (token: string) => void;
+}) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const widgetId = React.useRef<string | null>(null);
   const [scriptReady, setScriptReady] = React.useState(false);
@@ -38,6 +45,7 @@ export function TurnstileWidget({ onVerify }: { onVerify: (token: string) => voi
     if (!scriptReady || !containerRef.current || !window.turnstile) return;
     widgetId.current = window.turnstile.render(containerRef.current, {
       sitekey: turnstileSiteKey,
+      action,
       callback: onVerify,
       "expired-callback": () => onVerify(""),
       "error-callback": () => onVerify(""),

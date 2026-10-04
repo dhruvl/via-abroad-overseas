@@ -170,10 +170,16 @@ export function FindMyOptionsWizard() {
       <div className="mt-8 min-h-[260px]">
         {step === 0 && (
           <fieldset>
-            <legend id="fmo-q-educationLevel" className="font-display text-xl font-semibold text-navy-900">
+            <legend className="font-display text-xl font-semibold text-navy-900">
               What did you study, or what are you studying now?
             </legend>
-            <OptionGrid name="educationLevel" options={educationOptions} register={register} columns={4} />
+            <OptionGrid
+              name="educationLevel"
+              label="Education level"
+              options={educationOptions}
+              register={register}
+              columns={4}
+            />
             {errors.educationLevel && (
               <p role="alert" className="mt-3 text-xs font-medium text-error">
                 {errors.educationLevel.message}
@@ -184,12 +190,13 @@ export function FindMyOptionsWizard() {
 
         {step === 1 && (
           <fieldset>
-            <legend id="fmo-q-budgetRange" className="font-display text-xl font-semibold text-navy-900">
+            <legend className="font-display text-xl font-semibold text-navy-900">
               What&rsquo;s your approximate budget per year?
             </legend>
             <p className="mt-1.5 text-sm text-ink-muted">Tuition plus living costs, in rupees.</p>
             <OptionGrid
               name="budgetRange"
+              label="Approximate budget"
               options={budgetOptions}
               labels={budgetRangeLabels}
               register={register}
@@ -205,10 +212,10 @@ export function FindMyOptionsWizard() {
 
         {step === 2 && (
           <fieldset>
-            <legend id="fmo-q-preferredDestination" className="font-display text-xl font-semibold text-navy-900">
+            <legend className="font-display text-xl font-semibold text-navy-900">
               Where would you like to study?
             </legend>
-            <OptionGrid name="preferredDestination" options={destinationOptions} register={register} />
+            <OptionGrid name="preferredDestination" label="Preferred destination" options={destinationOptions} register={register} />
             {errors.preferredDestination && (
               <p role="alert" className="mt-3 text-xs font-medium text-error">
                 {errors.preferredDestination.message}
@@ -234,7 +241,7 @@ export function FindMyOptionsWizard() {
               </Field>
             </div>
 
-            <TurnstileWidget onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
+            <TurnstileWidget action="find_my_options" onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
             {errors.turnstileToken && (
               <p role="alert" className="text-xs font-medium text-error">
                 {errors.turnstileToken.message}
@@ -245,7 +252,8 @@ export function FindMyOptionsWizard() {
               <input
                 id="fmo-consent"
                 type="checkbox"
-                className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+                required
+                className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700"
                 {...register("consent")}
               />
               <label htmlFor="fmo-consent" className="text-sm text-ink-muted">
@@ -293,12 +301,14 @@ export function FindMyOptionsWizard() {
 
 function OptionGrid<Name extends "educationLevel" | "budgetRange" | "preferredDestination">({
   name,
+  label,
   options,
   labels,
   register,
   columns = 3,
 }: {
   name: Name;
+  label: string;
   options: readonly string[];
   labels?: Record<string, string>;
   register: ReturnType<typeof useForm<FindMyOptionsInput>>["register"];
@@ -307,7 +317,8 @@ function OptionGrid<Name extends "educationLevel" | "budgetRange" | "preferredDe
   return (
     <div
       role="radiogroup"
-      aria-labelledby={`fmo-q-${name}`}
+      aria-label={label}
+      aria-required="true"
       className={cn(
         // An odd last option spans the full row on phones instead of sitting alone.
         "mt-5 grid grid-cols-2 gap-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1",
@@ -329,7 +340,7 @@ function OptionGrid<Name extends "educationLevel" | "budgetRange" | "preferredDe
             />
             <label
               htmlFor={id}
-              className="flex h-14 cursor-pointer items-center justify-center rounded-xl border border-border-strong bg-surface px-3 text-center text-sm font-semibold text-navy-900 transition-colors hover:border-gold-400 peer-checked:border-navy-900 peer-checked:bg-navy-900 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-gold-500"
+              className="flex h-14 cursor-pointer items-center justify-center rounded-xl border border-border-strong bg-surface px-3 text-center text-sm font-semibold text-navy-900 transition-colors hover:border-gold-400 peer-checked:border-navy-900 peer-checked:bg-navy-900 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-gold-700"
             >
               {labels?.[option] ?? option}
             </label>

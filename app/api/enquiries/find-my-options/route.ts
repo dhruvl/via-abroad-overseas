@@ -44,6 +44,7 @@ export async function POST(request: Request) {
     honeypotValue: (payload as Record<string, unknown>)[HONEYPOT_FIELD] as string | undefined,
     formRenderedAt: data.formRenderedAt,
     turnstileToken: data.turnstileToken,
+    expectedTurnstileAction: "find_my_options",
     record: {
       enquiry_type: "general",
       full_name: data.fullName,

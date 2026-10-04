@@ -28,6 +28,7 @@ export async function POST(request: Request) {
     honeypotValue: (payload as Record<string, unknown>)[HONEYPOT_FIELD] as string | undefined,
     formRenderedAt: data.formRenderedAt,
     turnstileToken: data.turnstileToken,
+    expectedTurnstileAction: "consultation",
     record: {
       enquiry_type: "consultation",
       full_name: data.fullName,

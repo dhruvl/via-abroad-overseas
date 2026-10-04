@@ -67,7 +67,7 @@ export function ParentsSection() {
 
         <Reveal delay={0.1} className="mt-12 flex justify-center">
           <ConsultationCtaLink source="home_parents" size="lg">
-            Talk to a Counsellor
+            Book Free Consultation
           </ConsultationCtaLink>
         </Reveal>
       </Container>

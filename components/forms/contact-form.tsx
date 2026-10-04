@@ -32,12 +32,8 @@ export function ContactForm() {
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
       formRenderedAt,
-      // When Turnstile isn't configured for this environment, the widget
-      // never renders, so we seed a placeholder rather than permanently
-      // blocking client-side validation. The server is the real gate:
-      // verifyTurnstileToken() ignores token content entirely when
-      // Turnstile isn't configured and fails closed unless a local dev
-      // bypass flag is explicitly set.
+      // When Turnstile is not configured, the placeholder lets local form
+      // validation proceed; the server still decides whether bypass is allowed.
       turnstileToken: isTurnstileConfigured ? "" : "turnstile-not-configured",
       consent: false as unknown as true,
     },
@@ -139,7 +135,7 @@ export function ContactForm() {
         <textarea id="message" rows={4} className={textareaClassName} {...register("message")} />
       </Field>
 
-      <TurnstileWidget onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
+      <TurnstileWidget action="contact" onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
       {errors.turnstileToken && (
         <p role="alert" className="text-xs font-medium text-error">
           {errors.turnstileToken.message}
@@ -150,7 +146,8 @@ export function ContactForm() {
         <input
           id="consent"
           type="checkbox"
-          className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+          required
+          className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700"
           {...register("consent")}
         />
         <label htmlFor="consent" className="text-sm text-ink-muted">
