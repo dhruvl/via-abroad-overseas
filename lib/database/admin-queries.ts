@@ -4,6 +4,21 @@ import type { EnquiryFilters } from "@/lib/validation/admin";
 
 type SupabaseClient = Awaited<ReturnType<typeof createServerSupabaseClient>>;
 
+export class AuditLogWriteError extends Error {
+  readonly databaseCode?: string;
+
+  constructor(
+    readonly operation: "status_update" | "note_create",
+    databaseCode?: string
+  ) {
+    super(`Audit log persistence failed after ${operation}.`);
+    this.name = "AuditLogWriteError";
+    this.databaseCode = databaseCode && /^[A-Z0-9]{5}$/.test(databaseCode)
+      ? databaseCode
+      : undefined;
+  }
+}
+
 export type EnquiryRow = {
   id: string;
   enquiry_type: "general" | "consultation";
@@ -117,13 +132,17 @@ export async function updateEnquiryStatus(
 
   if (error) throw new Error(`Failed to update status: ${error.message}`);
 
-  await supabase.from("audit_logs").insert({
+  const { error: auditError } = await supabase.from("audit_logs").insert({
     admin_user_id: adminProfileId,
     action: "enquiry_status_updated",
     entity_type: "enquiry",
     entity_id: enquiryId,
     safe_metadata: { from_status: existing?.status ?? null, to_status: status },
   });
+
+  if (auditError) {
+    throw new AuditLogWriteError("status_update", auditError.code);
+  }
 }
 
 export async function listAdminNotes(supabase: SupabaseClient, enquiryId: string) {
@@ -149,13 +168,17 @@ export async function addAdminNote(
   });
   if (error) throw new Error(`Failed to add note: ${error.message}`);
 
-  await supabase.from("audit_logs").insert({
+  const { error: auditError } = await supabase.from("audit_logs").insert({
     admin_user_id: adminProfileId,
     action: "note_added",
     entity_type: "enquiry",
     entity_id: enquiryId,
     safe_metadata: { note_length: note.length },
   });
+
+  if (auditError) {
+    throw new AuditLogWriteError("note_create", auditError.code);
+  }
 }
 
 export async function listEnquiriesForExport(
