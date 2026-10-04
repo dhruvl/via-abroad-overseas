@@ -44,6 +44,19 @@ they always go through a server Route Handler using the secret key.
 Authenticated users get access only if `is_admin()` (a `SECURITY DEFINER`
 SQL function checking `admin_profiles`) returns true.
 
+Migration `0008` adds explicit Data API grants instead of relying on project
+defaults. Public enquiry inserts use the server-only secret client; browser
+roles receive no table privileges on protected data. Admin session clients
+can read the audit history and append rows attributed to their own
+`admin_profiles` entry. Audit rows have no client update/delete privileges
+or policies.
+
+Status changes and note creation persist their business row and audit row in
+separate statements, not one transaction. If an audit insert fails after the
+primary mutation succeeds, the Server Action returns a controlled
+partial-failure message and asks the admin to refresh and verify before
+retrying.
+
 ## Secret Management
 
 - `SUPABASE_SECRET_KEY`, `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, and

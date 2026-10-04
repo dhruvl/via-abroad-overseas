@@ -3,7 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth/admin";
 import { updateStatusSchema, createNoteSchema } from "@/lib/validation/admin";
-import { updateEnquiryStatus, addAdminNote } from "@/lib/database/admin-queries";
+import {
+  addAdminNote,
+  AuditLogWriteError,
+  updateEnquiryStatus,
+} from "@/lib/database/admin-queries";
 
 export type ActionResult = { success: true } | { success: false; error: string };
 
@@ -23,6 +27,18 @@ export async function updateEnquiryStatusAction(
   try {
     await updateEnquiryStatus(supabase, parsed.data.enquiryId, parsed.data.status, profile.id);
   } catch (error) {
+    if (error instanceof AuditLogWriteError) {
+      console.error("[admin] Audit persistence failed after status update.", {
+        operation: error.operation,
+        databaseCode: error.databaseCode ?? "unknown",
+      });
+      return {
+        success: false,
+        error:
+          "Status was updated, but its audit record could not be saved. Refresh and verify before retrying.",
+      };
+    }
+
     console.error(
       "[admin] Failed to update enquiry status:",
       error instanceof Error ? error.message : "unknown error"
@@ -47,6 +63,18 @@ export async function addAdminNoteAction(input: unknown): Promise<ActionResult> 
   try {
     await addAdminNote(supabase, parsed.data.enquiryId, profile.id, parsed.data.note);
   } catch (error) {
+    if (error instanceof AuditLogWriteError) {
+      console.error("[admin] Audit persistence failed after note creation.", {
+        operation: error.operation,
+        databaseCode: error.databaseCode ?? "unknown",
+      });
+      return {
+        success: false,
+        error:
+          "Note was saved, but its audit record could not be saved. Refresh before retrying.",
+      };
+    }
+
     console.error(
       "[admin] Failed to add note:",
       error instanceof Error ? error.message : "unknown error"
