@@ -66,7 +66,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-0.5 lg:flex xl:gap-1">
           {primaryNav.map((link) => {
             const active =
               link.href === "/"
@@ -78,7 +78,7 @@ export function SiteHeader() {
                 href={link.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative rounded-full px-4 py-2 text-sm font-medium text-white/85 transition-colors hover:text-white",
+                  "relative whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium text-white/85 transition-colors hover:text-white xl:px-4",
                   active && "font-semibold text-white"
                 )}
               >
@@ -97,12 +97,12 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 lg:flex">
           <a
             href={callHref}
-            className="flex items-center gap-2 text-sm font-medium text-white/80 transition-colors hover:text-white"
+            className="hidden items-center gap-2 whitespace-nowrap text-sm font-medium text-white/80 transition-colors hover:text-white xl:flex"
           >
             <Phone className="h-4 w-4" aria-hidden="true" />
             {business.phoneDisplay}
           </a>
-          <Button asChild size="default">
+          <Button asChild size="default" className="whitespace-nowrap">
             <Link href={primaryCta.href}>{primaryCta.label}</Link>
           </Button>
         </div>
