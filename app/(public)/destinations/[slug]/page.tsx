@@ -54,6 +54,9 @@ export default async function DestinationDetailPage({
         title={`Study in ${destination.name}`}
         description={destination.tagline}
         breadcrumb={[{ label: "Destinations", href: "/destinations" }, { label: destination.name }]}
+        backgroundImageSrc={destination.imageSrc}
+        backgroundImageAlt={destination.imageAlt}
+        backgroundImageObjectPosition={destination.imageObjectPosition}
       />
 
       <section className="bg-surface py-20 md:py-28">

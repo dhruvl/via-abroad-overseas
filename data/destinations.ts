@@ -8,6 +8,11 @@ export type Destination = {
   popularAreas: string[];
   highlights: string[];
   relatedServiceSlugs: string[];
+  /** Only set for destinations with real photography (public/destinations/). */
+  imageSrc?: string;
+  imageAlt?: string;
+  /** CSS object-position value, e.g. "60% 80%". Defaults to "center" when unset. */
+  imageObjectPosition?: string;
 };
 
 export const destinations: Destination[] = [
@@ -26,6 +31,9 @@ export const destinations: Destination[] = [
       "Strong research and industry connections at many institutions",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
+    imageSrc: "/destinations/usa.webp",
+    imageAlt: "International student smiling with the New York City skyline at sunset",
+    imageObjectPosition: "50% 85%",
   },
   {
     name: "Canada",
@@ -42,6 +50,9 @@ export const destinations: Destination[] = [
       "Multicultural, student-friendly cities",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
+    imageSrc: "/destinations/canada.webp",
+    imageAlt: "International student with the Toronto skyline and CN Tower in autumn",
+    imageObjectPosition: "65% 95%",
   },
   {
     name: "United Kingdom",
@@ -58,6 +69,9 @@ export const destinations: Destination[] = [
       "Graduate route options for post-study experience",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
+    imageSrc: "/destinations/uk.webp",
+    imageAlt: "International student standing before Gothic university architecture",
+    imageObjectPosition: "60% 80%",
   },
   {
     name: "Australia",
@@ -74,6 +88,9 @@ export const destinations: Destination[] = [
       "Strong support systems for international students",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
+    imageSrc: "/destinations/australia.webp",
+    imageAlt: "International student near the Sydney Opera House and Harbour Bridge",
+    imageObjectPosition: "55% 95%",
   },
   {
     name: "New Zealand",
@@ -90,6 +107,9 @@ export const destinations: Destination[] = [
       "Research-driven university culture",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
+    imageSrc: "/destinations/new-zealand.webp",
+    imageAlt: "International student smiling with the Auckland skyline, Sky Tower, and Rangitoto Island",
+    imageObjectPosition: "55% 75%",
   },
   {
     name: "Germany",
@@ -106,6 +126,9 @@ export const destinations: Destination[] = [
       "Central location for exploring the wider European region",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
+    imageSrc: "/destinations/germany.webp",
+    imageAlt: "International student smiling in front of the Brandenburg Gate in Berlin",
+    imageObjectPosition: "58% 65%",
   },
   {
     name: "Ireland",
@@ -122,6 +145,9 @@ export const destinations: Destination[] = [
       "Stay-back options for eligible graduates",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
+    imageSrc: "/destinations/ireland.webp",
+    imageAlt: "International student smiling near the Ha'penny Bridge in Dublin",
+    imageObjectPosition: "42% 70%",
   },
   {
     name: "France",
@@ -138,6 +164,9 @@ export const destinations: Destination[] = [
       "Central access to the wider European continent",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
+    imageSrc: "/destinations/france.webp",
+    imageAlt: "International student in a beret near the Eiffel Tower in Paris",
+    imageObjectPosition: "48% 68%",
   },
   {
     name: "Italy",
