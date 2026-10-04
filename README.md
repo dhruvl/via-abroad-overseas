@@ -10,8 +10,7 @@ limiting, and an authenticated admin dashboard for managing enquiries.
 ## Product Overview
 
 - **Public site** — premium, animated marketing site covering services,
-  study destinations, and company information, with a signature 3D globe
-  hero.
+  study destinations, and company information, with a photographic hero.
 - **Lead capture** — a general contact form and a free-consultation form,
   both server-validated, bot-protected, and rate-limited, writing directly
   to Postgres and triggering email notifications.
@@ -32,7 +31,6 @@ admin dashboard.
 | Framework | Next.js (App Router), React, TypeScript (strict) |
 | Styling | Tailwind CSS v4, shadcn/ui-style primitives |
 | Animation | Motion (Framer Motion) |
-| 3D | Three.js, React Three Fiber, Drei |
 | Database & Auth | Supabase (PostgreSQL + Auth) |
 | Email | Resend + React Email |
 | Bot protection | Cloudflare Turnstile |
@@ -76,8 +74,8 @@ All variables are documented in [`.env.example`](.env.example). Summary:
 
 Every third-party integration is optional in development:
 
-- **WhatsApp** — the floating action and hero CTA render in a clearly
-  labeled disabled state until `NEXT_PUBLIC_WHATSAPP_NUMBER` is set.
+- **WhatsApp** — the floating action button is hidden entirely (rather
+  than rendering a dead link) until `NEXT_PUBLIC_WHATSAPP_NUMBER` is set.
 - **Social links** — footer icons only render for platforms with a
   configured, valid `https://` URL.
 - **Turnstile** — the widget shows an explanatory note instead of a broken
