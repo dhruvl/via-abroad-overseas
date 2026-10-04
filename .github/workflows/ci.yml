@@ -59,6 +59,10 @@ jobs:
 
       - name: Run Playwright tests
         run: npm run test:e2e
+        env:
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+          NEXT_PUBLIC_SUPABASE_URL: https://ci-test.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-public-test-key
 
       - name: Upload Playwright report
         if: always()
