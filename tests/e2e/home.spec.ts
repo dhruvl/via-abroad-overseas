@@ -4,7 +4,7 @@ test.describe("Home page", () => {
   test("loads with the primary hero heading and CTA", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Your Gateway to"
+      "Your global future."
     );
     await expect(
       page.getByRole("link", { name: "Book Free Consultation" }).first()
@@ -22,7 +22,7 @@ test.describe("Home page", () => {
   test("primary navigation links resolve to the right pages", async ({ page, isMobile }) => {
     test.skip(isMobile, "Desktop nav is only visible above the lg breakpoint");
     await page.goto("/");
-    await page.getByLabel("Primary").getByRole("link", { name: "About", exact: true }).click();
+    await page.getByLabel("Primary").getByRole("link", { name: "About Us", exact: true }).click();
     await expect(page).toHaveURL(/\/about$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("About");
   });
