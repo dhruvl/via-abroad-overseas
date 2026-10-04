@@ -69,9 +69,8 @@ retrying.
   exception for this template file); all other `.env*` files remain
   untracked.
 - No secret is ever logged. Error logging (`console.error`) is limited to
-  short, non-sensitive messages (e.g. "Business notification send failed:
-  <error message>"), never full request bodies, tokens, or stack traces
-  returned to the client.
+  fixed diagnostic messages without provider error text, PII, full request
+  bodies, or tokens.
 
 ## Public Form Protection
 
@@ -93,10 +92,17 @@ See `lib/server/enquiry-pipeline.ts` for the implementation.
 Distributed via Upstash Redis (`@upstash/ratelimit`, sliding window). Two
 limits apply simultaneously: a coarse per-request-fingerprint burst limit
 (5 / 10 min) and a stricter per-contact-pair limit (3 / hour) to stop
-repeated submissions targeting one email/phone. In local development
-without Upstash configured, an in-memory fallback is used — this is
-explicitly **not** safe for production (resets on restart, not shared
-across instances).
+repeated submissions targeting one email/phone. Contact keys contain a
+domain-separated HMAC-SHA-256 digest of the validated, normalized email and
+phone; raw contact values are never sent as Redis key material. The HMAC and
+request fingerprint use the server-only `ABUSE_HASH_SALT`.
+
+Production requires valid `UPSTASH_REDIS_REST_URL`,
+`UPSTASH_REDIS_REST_TOKEN`, and a high-entropy `ABUSE_HASH_SALT` (at least
+32 characters). Missing/partial/invalid configuration or an Upstash runtime
+failure fails closed: public enquiry requests receive a generic HTTP 503.
+In-memory rate limiting and the local hash-salt fallback are available only
+in development/tests and must not be used as production protection.
 
 ## Dependency Maintenance
 
@@ -141,7 +147,8 @@ Never logged: passwords, Supabase/Resend/Turnstile/Upstash secrets, full
 auth cookies, or complete enquiry message bodies. Error logs contain short
 diagnostic messages and, where useful, a non-sensitive entity id (e.g. an
 enquiry UUID) so a failed notification email can be manually followed up
-without exposing the enquiry's content in logs.
+without exposing the enquiry's content in logs. Provider error text is not
+logged because it can contain contact details or request-specific values.
 
 ## Error Responses
 

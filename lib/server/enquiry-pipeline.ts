@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { verifyTurnstileToken } from "@/lib/security/turnstile";
 import { formFingerprintLimiter, formContactLimiter } from "@/lib/rate-limit/limiter";
 import { hashRequestFingerprint, getClientIp } from "@/lib/security/fingerprint";
+import { deriveContactPairRateLimitKey } from "@/lib/rate-limit/contact-key";
+import { getAbuseHashSalt, RateLimitUnavailableError } from "@/lib/rate-limit/config";
 import { isHoneypotTripped, isSuspiciouslyFast, isFormStale } from "@/lib/security/spam-checks";
 import { insertEnquiry, type NewEnquiryRecord } from "@/lib/database/enquiries";
 import { sendBusinessNotificationEmail, sendStudentConfirmationEmail } from "@/lib/email/send";
@@ -19,6 +21,9 @@ export type EnquiryPipelineInput = {
 
 const GENERIC_ERROR = {
   error: "We couldn't process your submission. Please try again in a moment.",
+};
+const RATE_LIMIT_UNAVAILABLE = {
+  error: "Service temporarily unavailable. Please try again shortly.",
 };
 
 export async function runEnquiryPipeline({
@@ -41,13 +46,23 @@ export async function runEnquiryPipeline({
 
   const ip = getClientIp(request.headers);
   const userAgent = request.headers.get("user-agent") || "unknown";
-  const fingerprint = await hashRequestFingerprint(ip, userAgent);
+  let fingerprint: string;
+  let fingerprintResult: Awaited<ReturnType<typeof formFingerprintLimiter.limit>>;
+  let contactResult: Awaited<ReturnType<typeof formContactLimiter.limit>>;
+  try {
+    fingerprint = await hashRequestFingerprint(ip, userAgent);
 
-  // 3. Distributed rate limiting — coarse fingerprint + stricter contact-pair limit.
-  const [fingerprintResult, contactResult] = await Promise.all([
-    formFingerprintLimiter.limit(fingerprint),
-    formContactLimiter.limit(`${record.email.toLowerCase()}:${record.phone}`),
-  ]);
+    // 3. Distributed rate limiting — coarse fingerprint + stricter HMAC contact key.
+    const contactKey = deriveContactPairRateLimitKey(record.email, record.phone, getAbuseHashSalt());
+    [fingerprintResult, contactResult] = await Promise.all([
+      formFingerprintLimiter.limit(`fingerprint:v1:${fingerprint}`),
+      formContactLimiter.limit(contactKey),
+    ]);
+  } catch (error) {
+    const reason = error instanceof RateLimitUnavailableError ? error.reason : "fingerprint_unavailable";
+    console.error("[enquiry] Abuse protection unavailable.", { reason });
+    return NextResponse.json(RATE_LIMIT_UNAVAILABLE, { status: 503 });
+  }
 
   if (!fingerprintResult.success || !contactResult.success) {
     return NextResponse.json(
@@ -73,11 +88,8 @@ export async function runEnquiryPipeline({
       ...attribution,
       abuse_fingerprint: fingerprint,
     });
-  } catch (error) {
-    console.error(
-      "[enquiry] Database insert failed:",
-      error instanceof Error ? error.message : "unknown error"
-    );
+  } catch {
+    console.error("[enquiry] Database insert failed.");
     return NextResponse.json(GENERIC_ERROR, { status: 500 });
   }
 

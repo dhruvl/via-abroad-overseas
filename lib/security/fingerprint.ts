@@ -1,4 +1,5 @@
 import "server-only";
+import { getAbuseHashSalt, RateLimitUnavailableError } from "@/lib/rate-limit/config";
 
 /**
  * Produces a short-lived, salted hash used only to group requests for
@@ -7,15 +8,19 @@ import "server-only";
  * is ever persisted alongside an enquiry.
  */
 export async function hashRequestFingerprint(ip: string, userAgent: string) {
-  const salt = process.env.ABUSE_HASH_SALT || "dev-only-insecure-salt";
+  const salt = getAbuseHashSalt();
   const input = `${salt}:${ip}:${userAgent.slice(0, 200)}`;
 
-  const encoder = new TextEncoder();
-  const data = encoder.encode(input);
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+  try {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(input);
+    const digest = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  } catch {
+    throw new RateLimitUnavailableError("fingerprint_unavailable");
+  }
 }
 
 export function getClientIp(headers: Headers): string {

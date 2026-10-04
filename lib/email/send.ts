@@ -38,15 +38,12 @@ export async function sendBusinessNotificationEmail(
       react: BusinessNotificationEmail({ data }),
     });
     if (result.error) {
-      console.error("[email] Business notification send failed:", result.error.message);
+      console.error("[email] Business notification send failed.");
       return { success: false };
     }
     return { success: true };
-  } catch (error) {
-    console.error(
-      "[email] Business notification send threw:",
-      error instanceof Error ? error.message : "unknown error"
-    );
+  } catch {
+    console.error("[email] Business notification send threw.");
     return { success: false };
   }
 }
@@ -68,15 +65,12 @@ export async function sendStudentConfirmationEmail(
       react: StudentConfirmationEmail({ fullName }),
     });
     if (result.error) {
-      console.error("[email] Student confirmation send failed:", result.error.message);
+      console.error("[email] Student confirmation send failed.");
       return { success: false };
     }
     return { success: true };
-  } catch (error) {
-    console.error(
-      "[email] Student confirmation send threw:",
-      error instanceof Error ? error.message : "unknown error"
-    );
+  } catch {
+    console.error("[email] Student confirmation send threw.");
     return { success: false };
   }
 }
