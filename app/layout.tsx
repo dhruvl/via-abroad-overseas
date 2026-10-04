@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Playfair_Display } from "next/font/google";
+import { Manrope, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
 import { OrganizationJsonLd } from "@/components/seo/organization-jsonld";
@@ -12,10 +12,11 @@ const manrope = Manrope({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const dmSerifDisplay = DM_Serif_Display({
+  variable: "--font-dm-serif-display",
   subsets: ["latin"],
   display: "swap",
+  weight: "400",
   style: ["normal", "italic"],
 });
 
@@ -65,7 +66,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${manrope.variable} ${playfair.variable} h-full antialiased`}
+      className={`${manrope.variable} ${dmSerifDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-surface-muted text-ink">
         <OrganizationJsonLd />

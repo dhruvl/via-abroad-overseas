@@ -7,29 +7,32 @@
 /* ---------------------------------------------------------------------- */
 
 :root {
-  /* Navy elevation scale — deepest to lightest */
-  --navy-950: #060e1c;
-  --navy-900: #0b1f3a;
+  /* Navy elevation scale — deepest to lightest. 950/900 are the approved
+     brand anchors (Midnight Navy / Deep Navy); 800-500 are unspecified by
+     the brief and kept as the existing interpolated ramp. */
+  --navy-950: #071525;
+  --navy-900: #0d2238;
   --navy-800: #122a4d;
   --navy-700: #1b3a68;
   --navy-600: #274d84;
   --navy-500: #35619f;
 
-  /* Gold accent scale */
-  --gold-700: #96762f;
-  --gold-600: #b8933f;
-  --gold-500: #d4af37;
-  --gold-400: #e2c569;
-  --gold-300: #edd996;
-  --gold-200: #f5e8bf;
+  /* Gold accent scale — rebuilt around the approved Champagne Gold anchor
+     (500) rather than the old brighter "trophy gold". */
+  --gold-700: #786540;
+  --gold-600: #ae935d;
+  --gold-500: #c8a96b;
+  --gold-400: #d2b886;
+  --gold-300: #dbc79f;
+  --gold-200: #e6d8bc;
 
   /* Neutral surfaces & text */
   --surface: #ffffff;
-  --surface-muted: #f7f8fa;
+  --surface-muted: #f7f5f0;
   --surface-elevated: #ffffff;
   --border-subtle: #e4e7ec;
   --border-strong: #c9cfd9;
-  --ink: #101828;
+  --ink: #17202a;
   --ink-muted: #545b6a;
   --ink-faint: #7d8494;
 
@@ -41,8 +44,8 @@
   --error: #b3261e;
   --error-bg: #fbeae9;
 
-  /* Focus ring */
-  --focus-ring: #d4af37;
+  /* Focus ring — derives from the gold accent token instead of duplicating its hex */
+  --focus-ring: var(--gold-500);
 
   --radius-sm: 0.375rem;
   --radius-md: 0.75rem;
@@ -85,7 +88,7 @@
   --color-focus-ring: var(--focus-ring);
 
   --font-sans: var(--font-manrope);
-  --font-display: var(--font-playfair);
+  --font-display: var(--font-dm-serif-display);
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
