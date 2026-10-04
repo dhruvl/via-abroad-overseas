@@ -76,14 +76,27 @@ retrying.
 
 Every public form submission passes through, in order:
 
-1. Oversized-payload rejection (before JSON parsing).
+1. Content-Type enforcement and a streaming UTF-8 byte limit (20,000 bytes)
+   before JSON parsing. Oversized streams are cancelled before the remaining
+   body is buffered. Malformed JSON returns 400, an oversized body returns
+   413, and unsupported media types return 415.
 2. Zod schema validation (never trusts client-side pass/fail).
 3. Honeypot field check (silently accepted — bots aren't told they failed).
 4. Submission-timing heuristic (rejects implausibly instant submissions).
 5. Two-tier Upstash rate limiting (fingerprint + email/phone pair).
 6. Cloudflare Turnstile server-side verification (**fails closed** when
    unconfigured, unless `ALLOW_UNVERIFIED_TURNSTILE_IN_DEV=true` is
-   explicitly set for local development).
+   explicitly set outside production). The server validates provider success,
+   the exact hostname derived from `NEXT_PUBLIC_SITE_URL` (or the configured
+   Vercel production domain), and the endpoint-specific action. Contact,
+   consultation, and Find My Options use `contact`, `consultation`, and
+   `find_my_options`. Production does not accept arbitrary Vercel preview
+   hostnames; real form submissions are restricted to the canonical hostname.
+   Provider/configuration failures return a generic HTTP 503.
+
+Turnstile's provider-issued tokens are treated as short-lived and single-use.
+The application does not cache or retry a token or maintain a separate replay
+database.
 
 See `lib/server/enquiry-pipeline.ts` for the implementation.
 
@@ -130,7 +143,9 @@ Excel/Sheets. The export endpoint (`/api/admin/export`) is itself gated by
 - No `dangerouslySetInnerHTML` is used with user-controlled data. It is
   used only for JSON-LD structured data built from static, server-controlled
   business configuration and content (`components/seo/*-jsonld.tsx`).
-- Request bodies are size-capped before parsing (`MAX_REQUEST_BYTES`).
+- Enquiry request bodies are content-type checked and size-capped while
+  streaming (`MAX_REQUEST_BYTES`, measured in UTF-8 bytes), before JSON
+  parsing.
 
 ## Security Headers
 

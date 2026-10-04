@@ -223,7 +223,7 @@ export function FindMyOptionsWizard() {
               </Field>
             </div>
 
-            <TurnstileWidget onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
+            <TurnstileWidget action="find_my_options" onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
             {errors.turnstileToken && (
               <p role="alert" className="text-xs font-medium text-error">
                 {errors.turnstileToken.message}

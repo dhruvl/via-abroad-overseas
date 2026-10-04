@@ -50,8 +50,11 @@ Production model: **Vercel** (app) + **Supabase** (database/auth) +
 ## 4. Cloudflare Turnstile
 
 1. Create a Turnstile widget in the Cloudflare dashboard.
-2. Restrict it to your production hostname(s) (and Vercel preview domains
-   if you want bot protection on previews too).
+2. Restrict it to the canonical production hostname configured by
+   `NEXT_PUBLIC_SITE_URL`. Server verification requires an exact hostname
+   match and validates each endpoint's action. Arbitrary Vercel preview
+   hostnames are not accepted for form submissions; use the production
+   hostname for real enquiries.
 3. Set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`.
 4. Confirm `ALLOW_UNVERIFIED_TURNSTILE_IN_DEV` is **not** set in
    production environment variables.

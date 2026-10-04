@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   getClientIp: vi.fn(),
   deriveContactKey: vi.fn(),
   getSalt: vi.fn(),
+  verifyTurnstile: vi.fn(),
 }));
 
 vi.mock("@/lib/rate-limit/limiter", () => ({
@@ -29,7 +30,9 @@ vi.mock("@/lib/security/spam-checks", () => ({
   isSuspiciouslyFast: () => false,
   isFormStale: () => false,
 }));
-vi.mock("@/lib/security/turnstile", () => ({ verifyTurnstileToken: vi.fn() }));
+vi.mock("@/lib/security/turnstile", () => ({
+  verifyTurnstileToken: mocks.verifyTurnstile,
+}));
 vi.mock("@/lib/database/enquiries", () => ({ insertEnquiry: vi.fn() }));
 vi.mock("@/lib/email/send", () => ({
   sendBusinessNotificationEmail: vi.fn(),
@@ -37,21 +40,20 @@ vi.mock("@/lib/email/send", () => ({
 }));
 
 import { runEnquiryPipeline } from "@/lib/server/enquiry-pipeline";
-import { RateLimitUnavailableError } from "@/lib/rate-limit/config";
 
-describe("enquiry rate limit infrastructure failure", () => {
+describe("enquiry Turnstile failure handling", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.getClientIp.mockReturnValue("203.0.113.10");
     mocks.hashFingerprint.mockResolvedValue("safe-fingerprint-digest");
     mocks.getSalt.mockReturnValue("test-only-abuse-hash-salt-which-is-long-enough-123456");
     mocks.deriveContactKey.mockReturnValue("contact-pair:v1:private-digest");
-    mocks.fingerprintLimit.mockRejectedValue(
-      new RateLimitUnavailableError("upstash_unavailable")
-    );
+    mocks.fingerprintLimit.mockResolvedValue({ success: true });
+    mocks.contactLimit.mockResolvedValue({ success: true });
+    mocks.verifyTurnstile.mockResolvedValue({ valid: false, reason: "provider_unavailable" });
   });
 
-  it("returns a stable 503 without exposing provider errors or contact PII", async () => {
+  it("returns a generic 503 for provider failure and never exposes provider details", async () => {
     const log = vi.spyOn(console, "error").mockImplementation(() => undefined);
     const response = await runEnquiryPipeline({
       request: new Request("https://example.test/api/enquiries/contact", {
@@ -59,7 +61,7 @@ describe("enquiry rate limit infrastructure failure", () => {
       }),
       honeypotValue: undefined,
       formRenderedAt: Date.now() - 10_000,
-      turnstileToken: "turnstile-token",
+      turnstileToken: "secret-token-value",
       expectedTurnstileAction: "contact",
       record: {
         enquiry_type: "general",
@@ -78,14 +80,39 @@ describe("enquiry rate limit infrastructure failure", () => {
     expect(body).toEqual({
       error: "Service temporarily unavailable. Please try again shortly.",
     });
-    expect(JSON.stringify(body)).not.toContain("upstash");
+    expect(JSON.stringify(body)).not.toContain("Cloudflare");
+    expect(JSON.stringify(body)).not.toContain("secret-token-value");
     expect(JSON.stringify(body)).not.toContain("private.person@example.com");
-    expect(JSON.stringify(body)).not.toContain("+14155550199");
+    expect(JSON.stringify(log.mock.calls)).not.toContain("secret-token-value");
     expect(JSON.stringify(log.mock.calls)).not.toContain("private.person@example.com");
-    expect(JSON.stringify(log.mock.calls)).not.toContain("+14155550199");
-    expect(JSON.stringify(log.mock.calls)).not.toContain("203.0.113.10");
-    expect(log).toHaveBeenCalledWith("[enquiry] Abuse protection unavailable.", {
-      reason: "upstash_unavailable",
+    expect(log).toHaveBeenCalledWith("[enquiry] Turnstile verification unavailable.", {
+      reason: "provider_unavailable",
+    });
+  });
+
+  it("keeps invalid token context failures as a safe validation response", async () => {
+    mocks.verifyTurnstile.mockResolvedValue({ valid: false, reason: "hostname_mismatch" });
+    const response = await runEnquiryPipeline({
+      request: new Request("https://example.test/api/enquiries/contact"),
+      honeypotValue: undefined,
+      formRenderedAt: Date.now() - 10_000,
+      turnstileToken: "secret-token-value",
+      expectedTurnstileAction: "contact",
+      record: {
+        enquiry_type: "general",
+        full_name: "Test Person",
+        phone: "+14155550199",
+        email: "private.person@example.com",
+        interested_country: "UK",
+        service_required: "Study Abroad",
+        consent: true,
+      },
+      attribution: {},
+    });
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      error: "We couldn't verify your submission. Please try again.",
     });
   });
 });

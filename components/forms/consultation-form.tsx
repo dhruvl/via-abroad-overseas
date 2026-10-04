@@ -146,7 +146,7 @@ export function ConsultationForm() {
         <textarea id="message" rows={4} className={textareaClassName} {...register("message")} />
       </Field>
 
-      <TurnstileWidget onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
+      <TurnstileWidget action="consultation" onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
       {errors.turnstileToken && (
         <p role="alert" className="text-xs font-medium text-error">
           {errors.turnstileToken.message}
