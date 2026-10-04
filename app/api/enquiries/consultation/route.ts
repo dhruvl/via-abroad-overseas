@@ -1,20 +1,21 @@
 import { NextResponse } from "next/server";
 import { consultationFormSchema, attributionSchema, HONEYPOT_FIELD } from "@/lib/validation/enquiry";
 import { MAX_REQUEST_BYTES } from "@/lib/security/spam-checks";
+import { readBoundedJson } from "@/lib/server/bounded-json";
 import { runEnquiryPipeline } from "@/lib/server/enquiry-pipeline";
 
 export async function POST(request: Request) {
-  const rawBody = await request.text();
-  if (rawBody.length > MAX_REQUEST_BYTES) {
+  const body = await readBoundedJson(request, MAX_REQUEST_BYTES);
+  if (body.status === "unsupported_media_type") {
+    return NextResponse.json({ error: "Content-Type must be application/json." }, { status: 415 });
+  }
+  if (body.status === "too_large") {
     return NextResponse.json({ error: "Request payload too large." }, { status: 413 });
   }
-
-  let payload: unknown;
-  try {
-    payload = JSON.parse(rawBody);
-  } catch {
+  if (body.status === "malformed_json") {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
+  const payload = body.value;
 
   const parsed = consultationFormSchema.safeParse(payload);
   if (!parsed.success) {
@@ -35,6 +36,7 @@ export async function POST(request: Request) {
     honeypotValue: (payload as Record<string, unknown>)[HONEYPOT_FIELD] as string | undefined,
     formRenderedAt: data.formRenderedAt,
     turnstileToken: data.turnstileToken,
+    expectedTurnstileAction: "consultation",
     record: {
       enquiry_type: "consultation",
       full_name: data.fullName,

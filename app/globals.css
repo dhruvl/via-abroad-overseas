@@ -34,7 +34,7 @@
   --border-strong: #c9cfd9;
   --ink: #17202a;
   --ink-muted: #545b6a;
-  --ink-faint: #7d8494;
+  --ink-faint: #545b6a;
 
   /* Semantic states */
   --success: #1e7f4f;
@@ -45,7 +45,7 @@
   --error-bg: #fbeae9;
 
   /* Focus ring — derives from the gold accent token instead of duplicating its hex */
-  --focus-ring: var(--gold-500);
+  --focus-ring: var(--gold-700);
 
   --radius-sm: 0.375rem;
   --radius-md: 0.75rem;

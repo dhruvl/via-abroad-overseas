@@ -31,7 +31,7 @@ export function FinalCtaSection() {
             Book Free Consultation
           </ConsultationCtaLink>
         </Reveal>
-        <Reveal delay={0.24} className="text-sm text-white/45">
+        <Reveal delay={0.24} className="text-sm text-white/60">
           Or call {business.phoneDisplay} to speak with a counselor directly.
         </Reveal>
       </Container>

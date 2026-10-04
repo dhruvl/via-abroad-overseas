@@ -146,7 +146,7 @@ export function ConsultationForm() {
         <textarea id="message" rows={4} className={textareaClassName} {...register("message")} />
       </Field>
 
-      <TurnstileWidget onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
+      <TurnstileWidget action="consultation" onVerify={(token) => setValue("turnstileToken", token, { shouldValidate: true })} />
       {errors.turnstileToken && (
         <p role="alert" className="text-xs font-medium text-error">
           {errors.turnstileToken.message}
@@ -157,7 +157,8 @@ export function ConsultationForm() {
         <input
           id="consent"
           type="checkbox"
-          className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+          required
+          className="mt-1 h-4 w-4 shrink-0 rounded border-border-strong text-gold-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700"
           {...register("consent")}
         />
         <label htmlFor="consent" className="text-sm text-ink-muted">
