@@ -45,34 +45,28 @@ export function SiteHeader() {
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         isTransparent
           ? "bg-transparent"
-          : "bg-white/90 backdrop-blur-md shadow-[0_1px_0_0_rgba(16,24,40,0.06)]"
+          : "bg-navy-900/95 backdrop-blur-md shadow-[0_1px_0_0_rgba(0,0,0,0.2)]"
       )}
     >
       <div className="container-outer flex h-18 items-center justify-between py-3">
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-display text-lg font-semibold tracking-tight"
-        >
+        <Link href="/" className="flex items-center gap-2.5">
           <span
-            className={cn(
-              "flex h-9 w-9 items-center justify-center rounded-full border text-sm font-bold",
-              isTransparent
-                ? "border-gold-300 text-gold-300"
-                : "border-gold-500 text-gold-600"
-            )}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-gold-400/60 text-sm font-bold text-gold-300"
             aria-hidden="true"
           >
             V
           </span>
-          <span className={isTransparent ? "text-white" : "text-navy-900"}>
-            VIA ABROAD <span className="text-gold-500">OVERSEAS</span>
+          <span className="flex flex-col leading-none">
+            <span className="font-display text-lg font-semibold tracking-tight text-white">
+              VIA ABROAD <span className="text-gold-400">OVERSEAS</span>
+            </span>
+            <span className="hidden text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-gold-300/70 sm:block">
+              Make The Move
+            </span>
           </span>
         </Link>
 
-        <nav
-          aria-label="Primary"
-          className="hidden items-center gap-1 lg:flex"
-        >
+        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
           {primaryNav.map((link) => {
             const active =
               link.href === "/"
@@ -84,18 +78,14 @@ export function SiteHeader() {
                 href={link.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                  isTransparent
-                    ? "text-white/90 hover:text-white"
-                    : "text-navy-900/80 hover:text-navy-900",
-                  active &&
-                    (isTransparent ? "text-white" : "text-navy-900 font-semibold")
+                  "relative rounded-full px-4 py-2 text-sm font-medium text-white/85 transition-colors hover:text-white",
+                  active && "font-semibold text-white"
                 )}
               >
                 {link.label}
                 {active && (
                   <span
-                    className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-gold-500"
+                    className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-gold-400"
                     aria-hidden="true"
                   />
                 )}
@@ -107,10 +97,7 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 lg:flex">
           <a
             href={callHref}
-            className={cn(
-              "flex items-center gap-2 text-sm font-medium transition-colors",
-              isTransparent ? "text-white/90 hover:text-white" : "text-navy-900/80 hover:text-navy-900"
-            )}
+            className="flex items-center gap-2 text-sm font-medium text-white/80 transition-colors hover:text-white"
           >
             <Phone className="h-4 w-4" aria-hidden="true" />
             {business.phoneDisplay}
@@ -120,19 +107,21 @@ export function SiteHeader() {
           </Button>
         </div>
 
-        <button
-          type="button"
-          className={cn(
-            "flex h-11 w-11 items-center justify-center rounded-full lg:hidden",
-            isTransparent ? "text-white" : "text-navy-900"
-          )}
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-nav-sheet"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          onClick={() => setMobileOpen((v) => !v)}
-        >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <Button asChild size="sm" className="px-4">
+            <Link href={primaryCta.href}>Book Consultation</Link>
+          </Button>
+          <button
+            type="button"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-white"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-sheet"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -143,7 +132,7 @@ export function SiteHeader() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="max-h-[calc(100vh-4.5rem)] overflow-y-auto border-t border-border-subtle bg-white shadow-xl lg:hidden"
+            className="max-h-[calc(100vh-4.5rem)] overflow-y-auto border-t border-white/10 bg-navy-900 shadow-xl lg:hidden"
           >
             <nav aria-label="Mobile" className="container-outer flex flex-col gap-1 py-4">
               {primaryNav.map((link) => {
@@ -155,18 +144,18 @@ export function SiteHeader() {
                     href={link.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex min-h-12 items-center rounded-xl px-4 text-base font-medium text-navy-900",
-                      active && "bg-navy-900/5 font-semibold"
+                      "flex min-h-12 items-center rounded-xl px-4 text-base font-medium text-white/90",
+                      active && "bg-white/10 font-semibold text-white"
                     )}
                   >
                     {link.label}
                   </Link>
                 );
               })}
-              <div className="mt-2 flex flex-col gap-3 border-t border-border-subtle pt-4">
+              <div className="mt-2 flex flex-col gap-3 border-t border-white/10 pt-4">
                 <a
                   href={callHref}
-                  className="flex min-h-12 items-center gap-2 rounded-xl px-4 text-base font-medium text-navy-900"
+                  className="flex min-h-12 items-center gap-2 rounded-xl px-4 text-base font-medium text-white/90"
                 >
                   <Phone className="h-5 w-5" aria-hidden="true" />
                   Call {business.phoneDisplay}

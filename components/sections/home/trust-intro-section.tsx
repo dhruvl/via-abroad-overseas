@@ -21,11 +21,13 @@ const pillars = [
 export function TrustIntroSection() {
   return (
     <section className="bg-surface py-20 md:py-28">
-      <Container className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+      <Container className="grid gap-14 lg:grid-cols-[1fr_0.85fr] lg:gap-16">
         <Reveal>
-          <Eyebrow>Why Students Choose Us</Eyebrow>
+          <Eyebrow>More Than a Consultancy</Eyebrow>
           <h2 className="mt-4 text-balance font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-semibold text-navy-900">
-            Your Trusted Study Abroad Partner
+            More than a consultancy.
+            <br />
+            Your partner abroad.
           </h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-muted">
             At VIA ABROAD OVERSEAS, we guide students through every step of
@@ -33,32 +35,36 @@ export function TrustIntroSection() {
             university to navigating the admissions process, visa
             preparation, and pre-departure planning.
           </p>
+
+          <ul className="mt-8 flex flex-col gap-5">
+            {pillars.map((pillar) => (
+              <li key={pillar.title} className="flex items-start gap-3">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-gold-700" aria-hidden="true" />
+                <div>
+                  <p className="font-semibold text-navy-900">{pillar.title}</p>
+                  <p className="text-sm leading-relaxed text-ink-muted">{pillar.description}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </Reveal>
 
-        <div className="relative">
-          <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-[radial-gradient(60%_60%_at_30%_20%,rgba(212,175,55,0.12),transparent)]" aria-hidden="true" />
-          <div className="grid gap-5 sm:grid-cols-2">
-            {pillars.map((pillar, index) => (
-              <Reveal
-                key={pillar.title}
-                delay={index * 0.08}
-                className={
-                  index === 0
-                    ? "sm:col-span-2 rounded-2xl border border-border-subtle bg-surface-muted p-7"
-                    : "rounded-2xl border border-border-subtle bg-surface-muted p-7"
-                }
-              >
-                <CheckCircle2 className="h-6 w-6 text-gold-600" aria-hidden="true" />
-                <h3 className="mt-4 font-display text-xl font-semibold text-navy-900">
-                  {pillar.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-                  {pillar.description}
-                </p>
-              </Reveal>
-            ))}
+        <Reveal delay={0.1} className="relative hidden lg:block">
+          <div className="relative flex h-full min-h-[380px] flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-border-subtle bg-gradient-to-br from-navy-900 to-navy-950 p-10 text-center text-white">
+            <div
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_30%_20%,rgba(200,169,107,0.14),transparent)]"
+              aria-hidden="true"
+            />
+            <p className="relative font-display text-2xl italic leading-snug text-white/90">
+              &ldquo;Every journey abroad starts with a plan built around one
+              student, not a generic shortlist.&rdquo;
+            </p>
+            <div className="relative mt-8 h-px w-16 bg-gold-400/50" aria-hidden="true" />
+            <p className="relative mt-6 text-xs font-semibold uppercase tracking-[0.25em] text-gold-300">
+              Make The Move
+            </p>
           </div>
-        </div>
+        </Reveal>
       </Container>
     </section>
   );

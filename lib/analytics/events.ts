@@ -14,6 +14,8 @@ export type AnalyticsEventName =
   | "consultation_submitted"
   | "enquiry_form_started"
   | "enquiry_submitted"
+  | "find_my_options_started"
+  | "find_my_options_submitted"
   | "whatsapp_clicked"
   | "call_clicked"
   | "destination_viewed"

@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { motion } from "motion/react";
-import { Phone } from "lucide-react";
+import { Phone, CalendarCheck } from "lucide-react";
 import { whatsapp, callHref } from "@/lib/config";
 import { trackEvent } from "@/lib/analytics/events";
 
@@ -25,13 +26,28 @@ export function FloatingActions() {
         href={callHref}
         initial={{ opacity: 0, scale: 0.8, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ delay: 0.6, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         onClick={() => trackEvent("call_clicked", { source: "floating_action" })}
         aria-label="Call VIA ABROAD OVERSEAS"
         className="flex h-13 w-13 items-center justify-center rounded-full bg-navy-900 text-white shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
       >
         <Phone className="h-5 w-5" aria-hidden="true" />
       </motion.a>
+
+      <motion.span
+        initial={{ opacity: 0, scale: 0.8, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ delay: 0.45, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <Link
+          href="/book-consultation"
+          onClick={() => trackEvent("consultation_cta_clicked", { source: "floating_action" })}
+          aria-label="Book a free consultation with VIA ABROAD OVERSEAS"
+          className="flex h-13 w-13 items-center justify-center rounded-full bg-gold-500 text-navy-950 shadow-lg ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
+        >
+          <CalendarCheck className="h-5 w-5" aria-hidden="true" />
+        </Link>
+      </motion.span>
 
       {href && (
         <motion.a

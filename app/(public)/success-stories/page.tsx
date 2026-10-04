@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Sparkles } from "lucide-react";
+import Image from "next/image";
+import { Sparkles, UserRound } from "lucide-react";
 import { PageHero } from "@/components/sections/page-hero";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/motion/reveal";
@@ -39,7 +40,7 @@ export default function SuccessStoriesPage() {
               </p>
               <div className="mt-8 flex justify-center">
                 <ConsultationCtaLink source="success_stories_page" size="lg">
-                  Start Your Journey
+                  Book Free Consultation
                 </ConsultationCtaLink>
               </div>
             </Reveal>
@@ -50,14 +51,30 @@ export default function SuccessStoriesPage() {
                   key={testimonial.studentName}
                   className="rounded-2xl border border-border-subtle bg-surface-muted p-7"
                 >
-                  <p className="text-ink-muted">&ldquo;{testimonial.quote}&rdquo;</p>
-                  <p className="mt-4 font-semibold text-navy-900">
-                    {testimonial.studentName}
-                  </p>
-                  <p className="text-sm text-ink-faint">
-                    {testimonial.university ? `${testimonial.university}, ` : ""}
-                    {testimonial.destination}
-                  </p>
+                  <div className="flex items-center gap-3">
+                    {testimonial.photoUrl ? (
+                      <Image
+                        src={testimonial.photoUrl}
+                        alt={testimonial.studentName}
+                        width={48}
+                        height={48}
+                        className="h-12 w-12 rounded-full object-cover"
+                      />
+                    ) : (
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-navy-900/5 text-navy-900">
+                        <UserRound className="h-6 w-6" aria-hidden="true" />
+                      </span>
+                    )}
+                    <div>
+                      <p className="font-semibold text-navy-900">{testimonial.studentName}</p>
+                      <p className="text-xs text-ink-faint">
+                        {testimonial.course ? `${testimonial.course} · ` : ""}
+                        {testimonial.university ? `${testimonial.university}, ` : ""}
+                        {testimonial.destination}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-ink-muted">&ldquo;{testimonial.quote}&rdquo;</p>
                 </Reveal>
               ))}
             </div>

@@ -8,8 +8,6 @@ export type Destination = {
   popularAreas: string[];
   highlights: string[];
   relatedServiceSlugs: string[];
-  /** Approximate lat/lng used for the signature globe route visualization. */
-  coordinates: { lat: number; lng: number };
 };
 
 export const destinations: Destination[] = [
@@ -28,7 +26,6 @@ export const destinations: Destination[] = [
       "Strong research and industry connections at many institutions",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 39.8, lng: -98.6 },
   },
   {
     name: "Canada",
@@ -45,7 +42,6 @@ export const destinations: Destination[] = [
       "Multicultural, student-friendly cities",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 56.1, lng: -106.3 },
   },
   {
     name: "United Kingdom",
@@ -62,7 +58,6 @@ export const destinations: Destination[] = [
       "Graduate route options for post-study experience",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 54.0, lng: -2.5 },
   },
   {
     name: "Australia",
@@ -79,7 +74,6 @@ export const destinations: Destination[] = [
       "Strong support systems for international students",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: -25.3, lng: 133.8 },
   },
   {
     name: "New Zealand",
@@ -96,7 +90,6 @@ export const destinations: Destination[] = [
       "Research-driven university culture",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: -40.9, lng: 174.9 },
   },
   {
     name: "Germany",
@@ -113,7 +106,6 @@ export const destinations: Destination[] = [
       "Central location for exploring the wider European region",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 51.2, lng: 10.5 },
   },
   {
     name: "Ireland",
@@ -130,7 +122,6 @@ export const destinations: Destination[] = [
       "Stay-back options for eligible graduates",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 53.4, lng: -8.2 },
   },
   {
     name: "France",
@@ -147,7 +138,6 @@ export const destinations: Destination[] = [
       "Central access to the wider European continent",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 46.6, lng: 2.2 },
   },
   {
     name: "Italy",
@@ -164,7 +154,6 @@ export const destinations: Destination[] = [
       "Affordable tuition at many public institutions",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 42.8, lng: 12.6 },
   },
   {
     name: "Netherlands",
@@ -181,7 +170,6 @@ export const destinations: Destination[] = [
       "Compact country with excellent connectivity",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 52.1, lng: 5.3 },
   },
   {
     name: "Sweden",
@@ -198,7 +186,6 @@ export const destinations: Destination[] = [
       "High quality of life and safety standards",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 60.1, lng: 18.6 },
   },
   {
     name: "Singapore",
@@ -215,7 +202,6 @@ export const destinations: Destination[] = [
       "Shorter travel distance and time-zone proximity from India",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 1.35, lng: 103.8 },
   },
   {
     name: "UAE",
@@ -232,7 +218,6 @@ export const destinations: Destination[] = [
       "Multicultural, business-oriented environment",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 23.4, lng: 53.8 },
   },
   {
     name: "Malaysia",
@@ -249,7 +234,6 @@ export const destinations: Destination[] = [
       "Culturally familiar and welcoming environment for Indian students",
     ],
     relatedServiceSlugs: ["study-abroad", "visa-assistance"],
-    coordinates: { lat: 4.2, lng: 101.9 },
   },
 ];
 
@@ -257,9 +241,25 @@ export function getDestinationBySlug(slug: string) {
   return destinations.find((destination) => destination.slug === slug);
 }
 
-/** India origin point + the highlighted routes shown on the signature 3D globe. */
-export const originIndia = { lat: 20.6, lng: 78.9 };
+/**
+ * The eight destinations the homepage and footer feature by name, per the
+ * approved brief. All 14 destinations remain fully browsable and linked
+ * from /destinations and internal pages — this list only curates the
+ * homepage/footer spotlight.
+ */
+export const featuredDestinationSlugs = [
+  "uk",
+  "usa",
+  "australia",
+  "canada",
+  "germany",
+  "ireland",
+  "new-zealand",
+  "france",
+] as const;
 
-export const highlightedGlobeRoutes = ["usa", "canada", "uk", "australia", "germany"]
-  .map((slug) => destinations.find((d) => d.slug === slug))
-  .filter((d): d is Destination => Boolean(d));
+export function getFeaturedDestinations() {
+  return featuredDestinationSlugs
+    .map((slug) => getDestinationBySlug(slug))
+    .filter((d): d is Destination => Boolean(d));
+}

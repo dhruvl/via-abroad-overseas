@@ -64,7 +64,7 @@ export function AnalyticsProvider() {
         <div
           role="region"
           aria-label="Cookie consent"
-          className="fixed inset-x-0 bottom-0 z-[60] border-t border-border-subtle bg-white/95 backdrop-blur-md px-4 py-4 shadow-[0_-4px_20px_rgba(16,24,40,0.08)] md:px-6"
+          className="fixed inset-x-0 bottom-0 z-[60] border-t border-border-subtle bg-white/95 backdrop-blur-md px-4 py-4 shadow-[0_-4px_20px_rgba(23,32,42,0.08)] md:px-6"
         >
           <div className="container-outer flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between">
             <p className="text-sm text-ink-muted">

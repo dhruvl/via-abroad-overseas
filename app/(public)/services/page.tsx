@@ -41,7 +41,7 @@ export default function ServicesPage() {
               <Reveal key={service.slug} delay={(index % 2) * 0.08}>
                 <Link
                   href={`/services/${service.slug}`}
-                  className="group flex h-full flex-col rounded-2xl border border-border-subtle bg-surface-muted p-8 transition-all duration-300 hover:-translate-y-1 hover:border-gold-300 hover:shadow-[0_20px_40px_-16px_rgba(11,31,58,0.15)]"
+                  className="group flex h-full flex-col rounded-2xl border border-border-subtle bg-surface-muted p-8 transition-all duration-300 hover:-translate-y-1 hover:border-gold-300 hover:shadow-[0_20px_40px_-16px_rgba(13,34,56,0.15)]"
                 >
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy-900/5 text-navy-900">
                     <Icon className="h-6 w-6" aria-hidden="true" />

@@ -17,7 +17,7 @@ export function PageHero({
   return (
     <section className="relative overflow-hidden bg-navy-950 pb-16 pt-32 text-white md:pb-20 md:pt-40">
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_45%_at_85%_15%,rgba(212,175,55,0.14),transparent),radial-gradient(45%_45%_at_10%_85%,rgba(53,97,159,0.28),transparent)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_45%_at_85%_15%,rgba(200,169,107,0.14),transparent),radial-gradient(45%_45%_at_10%_85%,rgba(53,97,159,0.28),transparent)]"
         aria-hidden="true"
       />
       <Container className="relative">
