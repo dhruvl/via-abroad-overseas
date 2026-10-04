@@ -107,6 +107,56 @@ export const consultationFormSchema = z.object({
   ...antiSpamFields,
 });
 
+/**
+ * "Find My Options" is a separate, self-contained schema rather than a
+ * variant of consultationFormSchema — it has its own fixed option sets
+ * (education level, budget range, a short destination shortlist) defined
+ * by the approved brief, distinct from the full destinations/services
+ * catalogues. It reuses the same primitives (name/phone/email/consent/
+ * anti-spam) and the same enquiry pipeline, so no new backend
+ * infrastructure is introduced.
+ */
+export const educationLevelSchema = nonEmptyEnum([
+  "B.Tech",
+  "B.Sc",
+  "B.Com",
+  "BBA",
+  "BCA",
+  "MBA",
+  "Other",
+]);
+
+export const budgetRangeSchema = nonEmptyEnum(["10-15L", "15-25L", "25-40L", "40L+"]);
+
+export const budgetRangeLabels: Record<string, string> = {
+  "10-15L": "₹10–15L",
+  "15-25L": "₹15–25L",
+  "25-40L": "₹25–40L",
+  "40L+": "₹40L+",
+};
+
+export const findMyOptionsDestinationSchema = nonEmptyEnum([
+  "UK",
+  "USA",
+  "Australia",
+  "Canada",
+  "Germany",
+  "Not Sure",
+]);
+
+export const findMyOptionsSchema = z.object({
+  educationLevel: educationLevelSchema,
+  budgetRange: budgetRangeSchema,
+  preferredDestination: findMyOptionsDestinationSchema,
+  fullName: nameSchema,
+  phone: phoneSchema,
+  email: emailSchema,
+  consent: consentSchema,
+  ...antiSpamFields,
+});
+
+export type FindMyOptionsInput = z.infer<typeof findMyOptionsSchema>;
+
 export type ContactFormInput = z.infer<typeof contactFormSchema>;
 export type ConsultationFormInput = z.infer<typeof consultationFormSchema>;
 

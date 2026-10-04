@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   contactFormSchema,
   consultationFormSchema,
+  findMyOptionsSchema,
   countrySchema,
   serviceSchema,
 } from "@/lib/validation/enquiry";
@@ -106,6 +107,50 @@ describe("consultationFormSchema", () => {
       email: "rohit@example.com",
       currentQualification: "Wizard",
       preferredCountry: "Canada",
+      consent: true,
+      ...baseAntiSpam,
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("findMyOptionsSchema", () => {
+  it("accepts a valid wizard submission", () => {
+    const result = findMyOptionsSchema.safeParse({
+      educationLevel: "B.Tech",
+      budgetRange: "15-25L",
+      preferredDestination: "Canada",
+      fullName: "Priya Nair",
+      phone: "9876543210",
+      email: "priya@example.com",
+      consent: true,
+      ...baseAntiSpam,
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a budget value outside the approved options", () => {
+    const result = findMyOptionsSchema.safeParse({
+      educationLevel: "B.Tech",
+      budgetRange: "1Cr+",
+      preferredDestination: "Canada",
+      fullName: "Priya Nair",
+      phone: "9876543210",
+      email: "priya@example.com",
+      consent: true,
+      ...baseAntiSpam,
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects an education level outside the approved options", () => {
+    const result = findMyOptionsSchema.safeParse({
+      educationLevel: "PhD",
+      budgetRange: "15-25L",
+      preferredDestination: "Canada",
+      fullName: "Priya Nair",
+      phone: "9876543210",
+      email: "priya@example.com",
       consent: true,
       ...baseAntiSpam,
     });
