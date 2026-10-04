@@ -121,7 +121,7 @@ test.describe("accessibility and responsive behavior", () => {
     await firstOption.focus();
     await page.keyboard.press("Space");
     await expect(firstOption).toBeChecked();
-    await page.getByRole("button", { name: "Next" }).focus();
+    await page.getByRole("button", { name: "Next", exact: true }).focus();
     await page.keyboard.press("Enter");
     await expect(page.getByRole("radiogroup", { name: "Approximate budget" })).toBeVisible();
   });

@@ -110,7 +110,11 @@ export function ProcessSection() {
         </ol>
 
         <Reveal className="mt-14 flex flex-col items-center gap-3 text-center">
-          <ConsultationCtaLink source="home_process" size="lg">
+          <ConsultationCtaLink
+            source="home_process"
+            size="lg"
+            className="max-w-full max-sm:h-auto max-sm:whitespace-normal max-sm:py-3 max-sm:text-center"
+          >
             Start with Step 1: Free Consultation
           </ConsultationCtaLink>
         </Reveal>
