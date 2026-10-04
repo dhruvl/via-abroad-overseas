@@ -1,15 +1,7 @@
 import Image from "next/image";
 import { Compass } from "lucide-react";
 
-/**
- * OWNER CONTENT REQUIRED: no approved hero photograph exists yet.
- * Once a licensed, premium photo is available, drop the file in
- * `public/hero/` and set HERO_IMAGE_SRC below (e.g. "/hero/hero-student.jpg").
- * The component will then render it via next/image with the same overlay
- * treatment; until then it renders an honest, on-brand fallback instead of
- * a fabricated or stock photo.
- */
-const HERO_IMAGE_SRC: string | null = null;
+const HERO_IMAGE_SRC: string | null = "/hero/hero-student.webp";
 
 export function HeroVisual() {
   if (HERO_IMAGE_SRC) {
@@ -17,14 +9,18 @@ export function HeroVisual() {
       <div className="relative h-full w-full overflow-hidden rounded-[2rem]">
         <Image
           src={HERO_IMAGE_SRC}
-          alt="A student preparing for their study abroad journey"
+          alt="South Asian student standing on an international university campus"
           fill
           priority
           sizes="(min-width: 1024px) 45vw, 100vw"
-          className="object-cover"
+          className="object-cover object-[78%_30%]"
         />
         <div
-          className="absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/10 to-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/15 to-navy-950/10"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-navy-950/55 via-transparent to-transparent"
           aria-hidden="true"
         />
       </div>

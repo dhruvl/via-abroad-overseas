@@ -42,7 +42,7 @@ export function HeroSection() {
             </Button>
           </div>
 
-          <p className="mt-6 text-sm text-white/50">
+          <p className="mt-6 max-w-[82%] text-sm text-white/50 sm:max-w-none">
             From profile evaluation to pre-departure support — we&rsquo;re
             with you every step.
           </p>
