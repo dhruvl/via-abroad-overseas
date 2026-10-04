@@ -60,7 +60,14 @@ Production model: **Vercel** (app) + **Supabase** (database/auth) +
 
 1. Create an Upstash Redis database (choose a region close to your Vercel
    deployment region for latency).
-2. Set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`.
+2. Set both `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in
+   production and preview server environments.
+3. Set `ABUSE_HASH_SALT` to a unique high-entropy value of at least 32
+   characters (generate with `openssl rand -hex 32`). Keep it server-only;
+   do not reuse it across environments.
+4. Missing/partial/invalid configuration and Upstash outages fail closed
+   with HTTP 503 on public enquiry submissions. In-memory rate limiting and
+   the local hash-salt fallback are for development/tests only.
 
 ## 6. Vercel
 

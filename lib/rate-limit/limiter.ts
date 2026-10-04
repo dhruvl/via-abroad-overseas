@@ -1,42 +1,28 @@
 import "server-only";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import {
+  RateLimitUnavailableError,
+  resolveRateLimitRuntimeConfig,
+  type RateLimitRuntimeConfig,
+} from "@/lib/rate-limit/config";
 
-const isUpstashConfigured = Boolean(
-  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-);
+type Window = `${number} ${"s" | "m" | "h"}`;
+type RateLimitResult = {
+  success: boolean;
+  limit: number;
+  remaining: number;
+  reset: number;
+};
+type Limiter = { limit(key: string): Promise<RateLimitResult> };
+type DistributedLimiterFactory = (
+  requests: number,
+  window: Window,
+  url: string,
+  token: string
+) => Limiter;
 
-// Surface — loudly, in logs — when a production/preview deployment is
-// running without distributed rate limiting, so it never silently relies
-// on the per-instance in-memory fallback (which is ineffective across
-// Vercel's serverless instances). This is a visibility signal, not a
-// hard failure: forms still work, but abuse protection is degraded until
-// Upstash is configured.
-const isProductionRuntime =
-  process.env.NODE_ENV === "production" || process.env.VERCEL_ENV === "production";
-if (isProductionRuntime && !isUpstashConfigured) {
-  console.warn(
-    "[rate-limit] Upstash is NOT configured in a production runtime. " +
-      "Falling back to per-instance in-memory rate limiting, which is NOT " +
-      "distributed and provides weak abuse protection. Set " +
-      "UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN."
-  );
-}
-
-const redis = isUpstashConfigured
-  ? new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL!,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-    })
-  : null;
-
-/**
- * In-memory fallback so local development works without provisioning
- * Upstash. NOT distributed and NOT safe for production (resets on every
- * server restart / is per-instance only) — production deployments must
- * set UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN.
- */
-class InMemoryRateLimiter {
+class InMemoryRateLimiter implements Limiter {
   private hits = new Map<string, number[]>();
 
   constructor(
@@ -44,10 +30,10 @@ class InMemoryRateLimiter {
     private windowMs: number
   ) {}
 
-  async limit(key: string) {
+  async limit(key: string): Promise<RateLimitResult> {
     const now = Date.now();
     const windowStart = now - this.windowMs;
-    const existing = (this.hits.get(key) ?? []).filter((t) => t > windowStart);
+    const existing = (this.hits.get(key) ?? []).filter((time) => time > windowStart);
     existing.push(now);
     this.hits.set(key, existing);
     const success = existing.length <= this.maxRequests;
@@ -60,25 +46,95 @@ class InMemoryRateLimiter {
   }
 }
 
-function createLimiter(requests: number, window: `${number} ${"s" | "m" | "h"}`) {
-  if (redis) {
-    return new Ratelimit({
-      redis,
-      limiter: Ratelimit.slidingWindow(requests, window),
-      analytics: true,
-      prefix: "vao-ratelimit",
-    });
-  }
+const createUpstashLimiter: DistributedLimiterFactory = (requests, window, url, token) => {
+  const redis = new Redis({ url, token });
+  return new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(requests, window),
+    analytics: true,
+    prefix: "vao-ratelimit",
+  });
+};
 
-  const [amount, unit] = window.split(" ");
-  const multiplier = unit === "h" ? 3_600_000 : unit === "m" ? 60_000 : 1000;
-  return new InMemoryRateLimiter(requests, Number(amount) * multiplier);
+function assertUsableConfiguration(config: RateLimitRuntimeConfig) {
+  if (config.abuseHashSalt.kind === "missing") {
+    if (!config.localFallbackAllowed) {
+      throw new RateLimitUnavailableError("abuse_hash_salt_missing");
+    }
+  } else if (config.abuseHashSalt.kind === "invalid") {
+    throw new RateLimitUnavailableError("abuse_hash_salt_invalid");
+  }
 }
 
+/**
+ * Creates one limiter policy while deferring runtime/config checks until a
+ * request invokes limit(). This keeps production secrets out of build-time
+ * route evaluation. In-memory behavior is restricted to development/tests.
+ */
+export function createRateLimiter(
+  requests: number,
+  window: Window,
+  dependencies: {
+    resolveConfig?: () => RateLimitRuntimeConfig;
+    createDistributed?: DistributedLimiterFactory;
+  } = {}
+): Limiter {
+  const resolveConfig = dependencies.resolveConfig ?? (() => resolveRateLimitRuntimeConfig());
+  const distributedFactory = dependencies.createDistributed ?? createUpstashLimiter;
+  const [amount, unit] = window.split(" ");
+  const multiplier = unit === "h" ? 3_600_000 : unit === "m" ? 60_000 : 1000;
+  let memoryLimiter: InMemoryRateLimiter | undefined;
+  let distributedLimiter: Limiter | undefined;
+
+  return {
+    async limit(key: string) {
+      const config = resolveConfig();
+      assertUsableConfiguration(config);
+
+      if (config.upstash.kind === "invalid") {
+        throw new RateLimitUnavailableError("upstash_invalid");
+      }
+
+      if (config.upstash.kind === "missing") {
+        if (!config.localFallbackAllowed) {
+          throw new RateLimitUnavailableError("upstash_missing");
+        }
+        memoryLimiter ??= new InMemoryRateLimiter(requests, Number(amount) * multiplier);
+        return memoryLimiter.limit(key);
+      }
+
+      try {
+        distributedLimiter ??= distributedFactory(
+          requests,
+          window,
+          config.upstash.url,
+          config.upstash.token
+        );
+        return await distributedLimiter.limit(key);
+      } catch {
+        // Never retain provider messages, URLs, tokens, or request keys.
+        throw new RateLimitUnavailableError("upstash_unavailable");
+      }
+    },
+  };
+}
+
+export const rateLimitPolicy = {
+  fingerprint: { requests: 5, window: "10 m" },
+  contactPair: { requests: 3, window: "1 h" },
+} as const;
+
 /** Per-fingerprint burst limit: 5 submissions per 10 minutes. */
-export const formFingerprintLimiter = createLimiter(5, "10 m");
+export const formFingerprintLimiter = createRateLimiter(
+  rateLimitPolicy.fingerprint.requests,
+  rateLimitPolicy.fingerprint.window
+);
 
-/** Stricter limit keyed on the normalized email+phone pair: 3 per hour. */
-export const formContactLimiter = createLimiter(3, "1 h");
+/** Stricter limit keyed on the HMAC of the normalized email+phone pair. */
+export const formContactLimiter = createRateLimiter(
+  rateLimitPolicy.contactPair.requests,
+  rateLimitPolicy.contactPair.window
+);
 
-export const isRateLimitDistributed = isUpstashConfigured;
+/** Safe runtime status for health/preflight checks; it contains no secrets. */
+export { getRateLimitConfigurationStatus } from "@/lib/rate-limit/config";
