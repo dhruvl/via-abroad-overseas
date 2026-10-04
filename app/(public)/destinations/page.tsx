@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/sections/page-hero";
@@ -30,20 +31,44 @@ export default function DestinationsPage() {
             <Reveal key={destination.slug} delay={(index % 3) * 0.07}>
               <Link
                 href={`/destinations/${destination.slug}`}
-                className="group flex h-full flex-col justify-between rounded-2xl border border-border-subtle bg-surface-muted p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold-300 hover:shadow-[0_20px_40px_-16px_rgba(13,34,56,0.15)]"
+                className="group relative flex h-full min-h-[260px] flex-col justify-between overflow-hidden rounded-2xl border border-navy-900/10 bg-gradient-to-br from-navy-800 to-navy-900 p-7 text-white transition-colors duration-300 hover:border-gold-400/50"
               >
-                <div>
-                  <span className="text-4xl" aria-hidden="true">
+                {destination.imageSrc ? (
+                  <>
+                    <Image
+                      src={destination.imageSrc}
+                      alt={destination.imageAlt ?? destination.name}
+                      fill
+                      sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+                      style={{ objectPosition: destination.imageObjectPosition ?? "center" }}
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    />
+                    <div
+                      className="absolute inset-0 bg-gradient-to-t from-navy-950/95 via-navy-950/55 to-navy-950/15"
+                      aria-hidden="true"
+                    />
+                  </>
+                ) : (
+                  <div
+                    className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gold-500/10 blur-2xl transition-opacity duration-300 group-hover:opacity-100 opacity-60"
+                    aria-hidden="true"
+                  />
+                )}
+                <div className="relative z-10">
+                  <span
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-lg"
+                    aria-hidden="true"
+                  >
                     {destination.flag}
                   </span>
-                  <h2 className="mt-4 font-display text-xl font-semibold text-navy-900">
+                  <h2 className="mt-4 font-display text-xl font-semibold">
                     {destination.name}
                   </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+                  <p className="mt-2 text-sm leading-relaxed text-white/70">
                     {destination.tagline}
                   </p>
                 </div>
-                <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-700">
+                <span className="relative z-10 mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-300">
                   Explore {destination.name}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </span>

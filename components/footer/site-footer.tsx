@@ -118,7 +118,7 @@ export function SiteFooter() {
               </a>
             </li>
             <li>
-              <a href={emailHref} className="flex items-start gap-2 hover:text-white">
+              <a href={emailHref} className="flex items-start gap-2 break-all hover:text-white">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                 {business.email}
               </a>
